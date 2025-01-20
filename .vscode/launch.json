@@ -1,0 +1,52 @@
+{
+    "version": "0.2.0",
+    "compounds": [
+      {
+        "name": "Debug with Electron",
+        "configurations": ["Launch Electron", "Attach to Renderer"]
+      }
+    ],
+    "configurations": [
+        {
+            "name": "Debug with Chrome",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceFolder}",
+            "sourceMaps": true
+        },
+        {
+            "name": "Launch Electron",
+            "presentation": {"hidden": true},
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceRoot}",
+            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
+            "windows": {
+                "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
+            },
+            "program": "${workspaceRoot}/main/main.js",
+            "sourceMaps": true,
+            "outFiles": ["${workspaceRoot}/main/main.js"],
+            "args": ["--serve", "--remote-debugging-port=9222"]
+        },
+        {
+            "name": "Attach to Renderer",
+            "presentation": {"hidden": true},
+            "type": "chrome",
+            "request": "attach",
+            "port": 9222,
+            "webRoot": "${workspaceFolder}",
+            "sourceMaps": true
+        },
+        {
+            "name": "Debug Python with current file",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/server"
+        }
+    ]
+}
+

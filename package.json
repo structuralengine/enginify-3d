@@ -1,0 +1,42 @@
+{
+  "name": "enginify-3d",
+  "description": "Enginify 3D is a 3D modeling software for creating 3D models and animations.",
+  "version": "0.1.0",
+  "private": true,
+  "main": "main/main.js",
+  "scripts": {
+    "postinstall": "node -e \"require('fs').copyFileSync('node_modules/web-ifc/web-ifc.wasm', 'public/web-ifc.wasm')\"",
+    "dev": "npm-run-all -p dev:next dev:server",
+    "dev:next": "next dev",
+    "dev:server": "cd server && uvicorn main:app --host 0.0.0.0 --port 8000",
+    "build": "next build",
+    "start": "npm run tsc && npm-run-all -p dev serve",
+    "release": "npm-run-all -s tsc build && npx electron-builder build --config ./electron/builder.json",
+    "serve": "electron . --serve",
+    "tsc": "tsc -p ./electron/tsconfig.json"
+  },
+  "dependencies": {
+    "@monaco-editor/react": "^4.6.0",
+    "@types/three": "^0.172.0",
+    "clsx": "^2.1.1",
+    "electron-reloader": "^1.2.3",
+    "next": "15.1.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "three": "^0.172.0",
+    "web-ifc": "^0.0.66"
+  },
+  "devDependencies": {
+    "@types/next": "^8.0.7",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "electron": "^30.0.1",
+    "electron-builder": "^24.13.3",
+    "electron-debug": "^3.2.0",
+    "npm-run-all": "^4.1.5",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  }
+}

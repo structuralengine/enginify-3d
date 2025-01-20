@@ -1,0 +1,21 @@
+/* To learn more about this file see: https://angular.io/config/tsconfig. */
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "alwaysStrict": true,
+    "forceConsistentCasingInFileNames": true,
+    "lib": ["dom", "es2017"],
+    "module": "commonjs",
+    "moduleResolution": "node", // TypeScript がインポートされたモジュールをどのように見つけるかを決定します。node:node_modules ディレクトリを検索
+    "noEmit": false,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "target": "esnext",
+    "outDir": "../main"
+  },
+  "files": [
+    "main.ts"
+  ],
+  "include": ["**/*.ts", "**/*.tsx", "**/*.js"]
+}
