@@ -1,27 +1,27 @@
 {
   "productName": "Enginify 3D",
   "directories": {
-    "output": "../release/"
+    "output": "release/"
   },
   "files": [
-    "../.next/",
-    "../main/"
+    ".next/",
+    "main/"
   ],
   "win": {
-    "icon": "../app/favicon.ico",
+    "icon": "public/favicon.ico",
     "target": [
       "nsis"
     ],
     "asar": false
   },
   "mac": {
-    "icon": "../app/favicon.ico",
+    "icon": "public/favicon.ico",
     "target": [
       "dmg"
     ]
   },
   "linux": {
-    "icon": "../app/favicon.ico",
+    "icon": "public/favicon.ico",
     "target": [
       "AppImage"
     ]

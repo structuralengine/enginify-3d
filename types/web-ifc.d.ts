@@ -1,1 +1,0 @@
-declare module 'web-ifc/web-ifc.wasm';

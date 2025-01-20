@@ -17,20 +17,21 @@
   },
   "dependencies": {
     "@monaco-editor/react": "^4.6.0",
-    "@types/three": "^0.172.0",
+    "@thatopen/components": "^2.4.3",
+    "@thatopen/ui": "^2.4.1",
     "clsx": "^2.1.1",
     "electron-reloader": "^1.2.3",
     "next": "15.1.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "three": "^0.172.0",
-    "web-ifc": "^0.0.66"
+    "three": "^0.160.1"
   },
   "devDependencies": {
     "@types/next": "^8.0.7",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/three": "^0.172.0",
     "electron": "^30.0.1",
     "electron-builder": "^24.13.3",
     "electron-debug": "^3.2.0",
