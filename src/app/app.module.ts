@@ -13,7 +13,7 @@ import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { InputDataService } from './providers/input-data.service';
 import { MenuComponent } from "./components/menu/menu.component";
 import { ThreeComponent } from "./components/three/three.component";
-import { CodeComponent } from './components/code/code.component';
+import { MonacoComponent } from './components/monaco/monaco.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { SplitLayoutComponent } from './components/split-layout/split-layout.component';
 
@@ -22,7 +22,7 @@ import { SplitLayoutComponent } from './components/split-layout/split-layout.com
         AppComponent,
         MenuComponent,
         ThreeComponent,
-        CodeComponent,
+        MonacoComponent,
         ToolbarComponent,
         SplitLayoutComponent
     ],

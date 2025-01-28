@@ -9,15 +9,9 @@ let serve: boolean = args.some(val => val === '--serve');
 
 function createWindow(): BrowserWindow {
 
-  // const electronScreen = screen;
-  const size = { width: 1024, height: 848 };//electronScreen.getPrimaryDisplay().workAreaSize;
-
   // Create the browser window.
   win = new BrowserWindow({
-    x: 0,
-    y: 0,
-    width: size.width,
-    height: size.height,
+    maximizable: true,
     webPreferences: {
       nodeIntegration: true,
       allowRunningInsecureContent: (serve),
@@ -29,6 +23,15 @@ function createWindow(): BrowserWindow {
     const debug = require('electron-debug');
     debug();
     win.loadURL('http://localhost:4200');
+    const template = [
+      {
+        label: "メニュー",
+        submenu: [
+          { label: "Debug", click: () => { win!.webContents.openDevTools(); } }
+        ]
+      }
+    ];
+    Menu.setApplicationMenu(Menu.buildFromTemplate(template));
   } else {
     win.loadURL(url.format({
       pathname: path.join(__dirname, 'dist/index.html'),
@@ -37,21 +40,6 @@ function createWindow(): BrowserWindow {
     }));
   }
 
-  require('electron-reloader')(module, {
-    ignore: ['print.pdf']
-  });
-
-  const template = [
-    {
-      label: "メニュー",
-      submenu: [
-        { label: "Print", click: () => print_to_pdf() },
-        { label: "Debug", click: () => { win!.webContents.openDevTools(); } }
-      ]
-    }
-  ];
-  Menu.setApplicationMenu(Menu.buildFromTemplate(template));
-  //win.webContents.openDevTools();
 
 
   // Emitted when the window is closed.

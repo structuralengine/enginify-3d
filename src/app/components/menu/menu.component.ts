@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import packageJson from 'package.json';
 
-import { CodeService } from '../code/code.service';
+import { CodeService } from '../three/code.service';
 
 @Component({
     selector: 'app-menu',

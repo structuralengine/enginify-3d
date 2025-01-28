@@ -1,12 +1,12 @@
 import { Component, ElementRef, HostListener, ViewChild  } from '@angular/core';
-import { CodeComponent } from '../code/code.component';
+import { MonacoComponent } from '../monaco/monaco.component';
 import { ThreeComponent } from '../three/three.component';
 import { SceneService } from '../three/scene.service';
 
 @Component({
   selector: 'app-split-layout',
   standalone: true,
-  imports: [CodeComponent, ThreeComponent],
+  imports: [MonacoComponent, ThreeComponent],
   templateUrl: './split-layout.component.html'
 })
 export class SplitLayoutComponent {

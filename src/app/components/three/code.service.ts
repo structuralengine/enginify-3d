@@ -6,7 +6,7 @@ import * as ts from "typescript";
 import * as THREE from "three";
 import { mergeBufferGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import { InputDataService } from 'src/app/providers/input-data.service';
-import { SceneService } from '../three/scene.service';
+import { SceneService } from './scene.service';
 
 
 @Injectable({

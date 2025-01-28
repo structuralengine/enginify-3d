@@ -29,7 +29,6 @@
     "@angular/platform-browser": "18.2.13",
     "@angular/platform-browser-dynamic": "18.2.13",
     "@angular/router": "18.2.13",
-    "electron-reloader": "^1.2.3",
     "flowbite": "^3.0.0",
     "monaco-editor": "^0.52.2",
     "path": "^0.12.7",
