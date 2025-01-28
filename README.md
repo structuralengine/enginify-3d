@@ -1,36 +1,78 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 仕様
 
-## Getting Started
+## 非機能要件
 
-First, run the development server:
+- [Angular](https://v18.angular.jp/)
+- [Electron](https://www.electronjs.org/ja/docs/latest/)
+- スタイルシート
+  - [tailwind](https://tailwindui.com)
+- コンポーネント
+  - [Flowbite](https://flowbite.com/docs/getting-started/quickstart/)
+- ~~ドッキングウィンドウ~~
+  - [Dock Spawn TS](https://node-projects.github.io/dock-spawn-ts/)
+- 3Dエンジン
+  - [three.js](https://threejs.org/)
+- 2Dエンジン  
+  - [konva.js](https://konvajs.org/docs/index.html)
+- スプレッドシート
+  - [ParamQuery Grid](https://paramquery.com/tutorial)
+- コードエディタ
+  - [Monaco Editor](https://microsoft.github.io/monaco-editor/)
+
+
+
+# プログラムのセットアップ方法
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+# プログラムの起動方法
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Angular をデバッグ
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 1. Angularを起動
+```bash
+npm run start
+```
+http://localhost:4200 で待機します。
 
-## Learn More
+### 2. ブラウザを起動
+**F5** から
+`.vscode\launch.json` の
+**Debug with Chrome** を実行
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Electron をデバッグ
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 1. Angularを起動
+```bash
+npm run start:electron
+```
+http://localhost:4200 で待機します。
 
-## Deploy on Vercel
+### 2. Electronを起動
+**F5** から
+`.vscode\launch.json` の
+**Debug with Electron** を実行
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Electronアプリを実行（デバッグ無し）
+```bash
+npm run start:electron
+npm run serve:electron
+```
+
+## Webアプリをビルド
+```bash
+npm run build
+```
+`./dist` フォルダに出力されます。
+
+
+## Electronアプリのインストーラーを作成
+```bash
+npm run build:electron
+```
+`./release` フォルダに出力されます。
+

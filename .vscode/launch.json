@@ -11,7 +11,7 @@
             "name": "Debug with Chrome",
             "type": "chrome",
             "request": "launch",
-            "url": "http://localhost:3000",
+            "url": "http://localhost:4200",
             "webRoot": "${workspaceFolder}",
             "sourceMaps": true
         },
@@ -25,9 +25,9 @@
             "windows": {
                 "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
             },
-            "program": "${workspaceRoot}/main/main.js",
+            "program": "${workspaceRoot}/electron/main/main.js",
             "sourceMaps": true,
-            "outFiles": ["${workspaceRoot}/main/main.js"],
+            "outFiles": ["${workspaceRoot}/electron/main/main.js"],
             "args": ["--serve", "--remote-debugging-port=9222"]
         },
         {
@@ -38,14 +38,6 @@
             "port": 9222,
             "webRoot": "${workspaceFolder}",
             "sourceMaps": true
-        },
-        {
-            "name": "Debug Python with current file",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "${file}",
-            "console": "integratedTerminal",
-            "cwd": "${workspaceFolder}/server"
         }
     ]
 }

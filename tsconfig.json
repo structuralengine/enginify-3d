@@ -1,29 +1,15 @@
 {
+  "compileOnSave": false,
   "compilerOptions": {
-    "sourceMap": true,  // ソースマップは、コンパイルされた JavaScript コードと元の TypeScript コードを関連付けるためのファイルです
-    "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "typeRoots": ["./node_modules/@types"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true, // 厳格な型チェックを有効にする設定です。
-    "noEmit": true,
-    "esModuleInterop": true,  // require を使わずに import 文を使ってモジュールをインポートすることができます。
-    "module": "esnext",
-    "moduleResolution": "bundler",  // TypeScript がインポートされたモジュールをどのように見つけるかを決定します。node:node_modules ディレクトリを検索
-    "resolveJsonModule": true,  // JSON ファイルをモジュールとしてインポートできるようにする設定です。
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
-    "paths": {
-      "@/*": ["./*"]
-    }
-  },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+    "baseUrl": "./",
+    "outDir": "./dist",
+    "strict": true,   // 厳格な型チェックを有効にする設定です。
+    "esModuleInterop": true, // require を使わずに import 文を使ってモジュールをインポートすることができます。
+    "sourceMap": true, // ソースマップは、コンパイルされた JavaScript コードと元の TypeScript コードを関連付けるためのファイルです
+    "declaration": false, // TypeScript のコンパイラオプションの一つで、型定義ファイル（.d.ts ファイル）の生成を無効にする設定です。
+    "moduleResolution": "node", // 、TypeScript がインポートされたモジュールをどのように見つけるかを決定します。node:node_modules ディレクトリを検索
+    "target": "ES2022",
+    "module": "ES2022",
+    "resolveJsonModule": true, // JSON ファイルをモジュールとしてインポートできるようにする設定です。
+  }
 }

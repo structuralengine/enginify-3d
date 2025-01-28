@@ -1,4 +1,4 @@
-import {app, Menu, BrowserWindow, ipcMain, shell} from 'electron';
+import {app, Menu, BrowserWindow, ipcMain, shell, screen} from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 import * as fs from 'fs';
@@ -28,7 +28,7 @@ function createWindow(): BrowserWindow {
   if (serve) {
     const debug = require('electron-debug');
     debug();
-    win.loadURL('http://localhost:3000');
+    win.loadURL('http://localhost:4200');
   } else {
     win.loadURL(url.format({
       pathname: path.join(__dirname, 'dist/index.html'),

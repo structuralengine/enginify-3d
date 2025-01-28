@@ -1,5 +1,0 @@
-fastapi
-fastapi-cli
-typing_extensions
-python-multipart=0.0.20
-ifcopenshell=0.8.0
