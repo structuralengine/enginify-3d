@@ -33,14 +33,14 @@ export class SceneService {
   private transformTarget = []; // 物体移動ターゲット
 
   // 設置元から呼び出される初期化
-  public OnInit(_ontainer: HTMLCanvasElement) {
+  public OnInit(_ontainer: HTMLCanvasElement): boolean {
 
     this.container = _ontainer;
 
     if(this.renderer !== null) {
       this.container.appendChild( this.renderer.domElement );
       this.onWindowResize();
-      return; // 初期化済ならスキップ
+      return false; // 初期化済ならスキップ
     }
 
     this.scene = new THREE.Scene();
@@ -118,6 +118,7 @@ export class SceneService {
 
     this.render();
 
+    return true;
   }
   
   // 再描画

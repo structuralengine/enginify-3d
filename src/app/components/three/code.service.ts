@@ -15,20 +15,28 @@ import { SceneService } from './scene.service';
 export class CodeService {
 
   private ifcAPI = new IfcAPI();
+  private initPromise: Promise<void>;
+  private isInitialized = false;
 
   constructor(
     private input: InputDataService,
     private scene: SceneService) {
       // Initialize web-ifc
       this.ifcAPI.SetWasmPath('/assets/web-ifc/bin/');
-      this.ifcAPI.Init().then(() => {
+      this.initPromise = this.ifcAPI.Init().then(() => {
         console.log('web-ifc Initialization complete');
+        this.isInitialized = true;
       }).catch((err) => {
         console.error('web-ifc Initialization failed:', err);
+        throw err;
       });
     }
 
   public async runCode() {
+    if (!this.isInitialized) {
+      // Wait for initialization to complete before proceeding
+      await this.initPromise;
+    }
     const model = this.ifcAPI.CreateModel({ schema: Schemas.IFC4 });
 
     const compiled = ts.transpileModule(this.input.code, { compilerOptions: { module: ts.ModuleKind.CommonJS } })
@@ -90,6 +98,8 @@ export class CodeService {
     let modelID = this.ifcAPI.OpenModel(ifcData);
 
     this.LoadAllGeometry(modelID);
+
+    this.scene.render();
   }
 
   /**

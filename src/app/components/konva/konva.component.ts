@@ -9,6 +9,7 @@ import Konva from 'konva';
 })
 export class KonvaComponent implements AfterViewInit, OnDestroy {
   @ViewChild('konvaContainer', { static: false }) containerRef: ElementRef | undefined;
+
   private stage!: Konva.Stage;
   private layer!: Konva.Layer;
 
@@ -17,11 +18,11 @@ export class KonvaComponent implements AfterViewInit, OnDestroy {
     this.addShapes();
     this.stage.add(this.layer);
     // ウィンドウリサイズのハンドリング
-    window.addEventListener('resize', this.handleResize);
+    window.addEventListener('resize', this.onWindowResize);
   }
 
   ngOnDestroy(): void {
-    window.removeEventListener('resize', this.handleResize);
+    window.removeEventListener('resize', this.onWindowResize);
     this.stage.destroy();
   }
 
@@ -94,7 +95,7 @@ export class KonvaComponent implements AfterViewInit, OnDestroy {
     this.layer.add(rectangle);
   }
 
-  private handleResize = () => {
+  private onWindowResize = () => {
     if(!this.containerRef) return;
 
     const container = this.containerRef.nativeElement;
