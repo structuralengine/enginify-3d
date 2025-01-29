@@ -7,13 +7,13 @@ import { initFlowbite } from 'flowbite';
 
 import { MenuComponent } from './components/menu/menu.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
-import { SplitLayoutComponent } from './components/split-layout/split-layout.component';
+import { LayoutComponent } from './components/layout/layout.component';
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
     standalone: true,
-    imports: [RouterModule, MenuComponent, ToolbarComponent, SplitLayoutComponent]
+    imports: [RouterModule, MenuComponent, ToolbarComponent, LayoutComponent]
 })
 export class AppComponent implements OnInit  {
   public version: string;

@@ -34,7 +34,14 @@ export class SceneService {
 
   // 設置元から呼び出される初期化
   public OnInit(_ontainer: HTMLCanvasElement) {
+
     this.container = _ontainer;
+
+    if(this.renderer !== null) {
+      this.container.appendChild( this.renderer.domElement );
+      this.onWindowResize();
+      return; // 初期化済ならスキップ
+    }
 
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color( 0xf0f0f0 );
@@ -110,6 +117,7 @@ export class SceneService {
     this.transformControl.addEventListener( 'objectChange', this.updateObject );
 
     this.render();
+
   }
   
   // 再描画

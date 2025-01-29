@@ -15,7 +15,8 @@ import { MenuComponent } from "./components/menu/menu.component";
 import { ThreeComponent } from "./components/three/three.component";
 import { MonacoComponent } from './components/monaco/monaco.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
-import { SplitLayoutComponent } from './components/split-layout/split-layout.component';
+import { LayoutComponent } from './components/layout/layout.component';
+import { SceneService } from './components/three/scene.service';
 
 @NgModule({
     declarations: [
@@ -24,7 +25,7 @@ import { SplitLayoutComponent } from './components/split-layout/split-layout.com
         ThreeComponent,
         MonacoComponent,
         ToolbarComponent,
-        SplitLayoutComponent
+        LayoutComponent
     ],
     bootstrap: [
         AppComponent
@@ -37,6 +38,7 @@ import { SplitLayoutComponent } from './components/split-layout/split-layout.com
     providers: [
         ElectronService,
         InputDataService,
+        SceneService,
         provideHttpClient(withInterceptorsFromDi())
     ]
 })
