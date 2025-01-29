@@ -2,11 +2,12 @@ import { AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild  
 import { ThreeComponent } from '../three/three.component';
 import { SceneService } from '../three/scene.service';
 import { InputDataService } from 'src/app/providers/input-data.service';
+import { KonvaComponent } from '../konva/konva.component';
 
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [ThreeComponent],
+  imports: [ThreeComponent, KonvaComponent],
   templateUrl: './layout.component.html'
 })
 export class LayoutComponent implements OnInit {
@@ -47,12 +48,13 @@ export class LayoutComponent implements OnInit {
     if(this.container === undefined) return;
     const width = this.container.clientWidth;
     const height = this.container.clientHeight;
+    const top = this.container.offsetTop;
 
     const ratio = this.data.range / 100;
     this.data.boxWidth = this.min_width + (width - this.min_width) * ratio;
     this.data.boxHeight = this.min_height + (height - this.min_height) * ratio;;
 
-    this.data.boxTop = this.padding_top * (1 - ratio);
+    this.data.boxTop = top + this.padding_top * (1 - ratio);
     this.data.boxLeft = (width - this.padding_right - this.min_width) * (1 - ratio);
   }
 

@@ -1,18 +1,20 @@
-<div #layout id="layout" class="h-full w-full bg-yellow-100">
+<div #layout id="layout" class="h-full w-full">
+
+  <app-konva></app-konva>
 
   <input id="default-range" type="range" value="{{data.range}}" (input)="changeRange($event)" 
     min="0" max="100" step="1"
     class="z-10 h-2 bg-white rounded-lg appearance-none cursor-pointer dark:bg-blue-100
     absolute top-12 right-4 p-2">
     
-  <div class="relative shadow-xl"
-      [style.width.px]="data.boxWidth" 
-      [style.height.px]="data.boxHeight" 
-      [style.top.px]="data.boxTop" 
-      [style.left.px]="data.boxLeft">
+  <div class="absolute shadow-xl"
+    [style.width.px]="data.boxWidth" 
+    [style.height.px]="data.boxHeight" 
+    [style.top.px]="data.boxTop" 
+    [style.left.px]="data.boxLeft">
 
-    <app-three></app-three>
-  </div>
+  <app-three></app-three>
+</div>
 
 </div>
 

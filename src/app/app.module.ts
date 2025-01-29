@@ -17,6 +17,7 @@ import { MonacoComponent } from './components/monaco/monaco.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { LayoutComponent } from './components/layout/layout.component';
 import { SceneService } from './components/three/scene.service';
+import { KonvaComponent } from './components/konva/konva.component';
 
 @NgModule({
     declarations: [
@@ -25,7 +26,8 @@ import { SceneService } from './components/three/scene.service';
         ThreeComponent,
         MonacoComponent,
         ToolbarComponent,
-        LayoutComponent
+        LayoutComponent,
+        KonvaComponent
     ],
     bootstrap: [
         AppComponent
