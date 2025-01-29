@@ -15,8 +15,8 @@ export class LayoutComponent implements OnInit {
   
   private padding_top = 12;
   private padding_right = 25;
-  private min_width = 300;
-  private min_height = 300;
+  private min_width = 200;
+  private min_height = 200;
 
   constructor(private scene: SceneService,
     public data: InputDataService
