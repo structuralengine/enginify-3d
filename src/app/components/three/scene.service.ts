@@ -17,7 +17,7 @@ export class SceneService {
   private renderer: THREE.WebGLRenderer | null = null;
   // カメラ
   private camera: THREE.OrthographicCamera | null = null;
-  private frustumSize = 600; // カメラの視錐台（フラスタム）のサイズ
+  private frustumSize = 6; // カメラの視錐台（フラスタム）のサイズ
 
   // レイキャスタ―
   private raycaster = new THREE.Raycaster();
@@ -53,41 +53,41 @@ export class SceneService {
     const SCREEN_WIDTH = this.container.clientWidth;
     const SCREEN_HEIGHT = this.container.clientHeight;
     const cameraMatrix = this.getCameraMatrix(SCREEN_WIDTH, SCREEN_HEIGHT);
-    const near: number = 150;
-    const far: number = 2000;
+    const near: number = 0.1;
+    const far: number = 1000;
     this.camera = new THREE.OrthographicCamera( 
       cameraMatrix.left, cameraMatrix.right, 
       cameraMatrix.top, cameraMatrix.bottom, 
       near, far );
-    this.camera.position.set( 0, 250, 1000 );
+    this.camera.position.set( 5, 5, 5 );
     this.scene.add( this.camera );
 
     // ライトの設定
     this.scene.add( new THREE.AmbientLight( 0xf0f0f0, 3 ) );
     const light = new THREE.SpotLight( 0xffffff, 4.5 );
-    light.position.set( 0, 1500, 200 );
+    light.position.set( 10, 10, 10 );
     light.angle = Math.PI * 0.2;
     light.decay = 0;
     light.castShadow = true;
-    light.shadow.camera.near = 200;
-    light.shadow.camera.far = 2000;
+    light.shadow.camera.near = 0.1;
+    light.shadow.camera.far = 1000;
     light.shadow.bias = - 0.000222;
     light.shadow.mapSize.width = 1024;
     light.shadow.mapSize.height = 1024;
     this.scene.add( light );
 
     // 床の設定
-    const planeGeometry = new THREE.PlaneGeometry( 2000, 2000 );
+    const planeGeometry = new THREE.PlaneGeometry( 100, 100 );
     planeGeometry.rotateX( - Math.PI / 2 );
     const planeMaterial = new THREE.ShadowMaterial( { color: 0x000000, opacity: 0.2 } );
 
     const plane = new THREE.Mesh( planeGeometry, planeMaterial );
-    plane.position.y = - 200;
+    plane.position.y = -0.2;
     plane.receiveShadow = true;
     this.scene.add( plane );
 
-    const helper = new THREE.GridHelper( 2000, 100 );
-    helper.position.y = - 199;
+    const helper = new THREE.GridHelper( 100, 1000 );
+    helper.position.y = -0.199;
     (helper.material as THREE.Material).opacity = 0.25;
     (helper.material as THREE.Material).transparent = true;
     this.scene.add( helper );
