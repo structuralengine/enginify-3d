@@ -17,7 +17,7 @@ export class SceneService {
   private renderer: THREE.WebGLRenderer | null = null;
   // カメラ
   private camera: THREE.OrthographicCamera | null = null;
-  private frustumSize = 6; // カメラの視錐台（フラスタム）のサイズ
+  private frustumSize = 50; // カメラの視錐台（フラスタム）のサイズ
 
   // レイキャスタ―
   private raycaster = new THREE.Raycaster();
@@ -59,13 +59,13 @@ export class SceneService {
       cameraMatrix.left, cameraMatrix.right, 
       cameraMatrix.top, cameraMatrix.bottom, 
       near, far );
-    this.camera.position.set( 5, 5, 5 );
+    this.camera.position.set( 15, 15, 15 );
     this.scene.add( this.camera );
 
     // ライトの設定
     this.scene.add( new THREE.AmbientLight( 0xf0f0f0, 3 ) );
     const light = new THREE.SpotLight( 0xffffff, 4.5 );
-    light.position.set( 10, 10, 10 );
+    light.position.set( 1000, 1000, 1000 );
     light.angle = Math.PI * 0.2;
     light.decay = 0;
     light.castShadow = true;
@@ -86,7 +86,7 @@ export class SceneService {
     plane.receiveShadow = true;
     this.scene.add( plane );
 
-    const helper = new THREE.GridHelper( 100, 1000 );
+    const helper = new THREE.GridHelper( 100, 100 );
     helper.position.y = -0.199;
     (helper.material as THREE.Material).opacity = 0.25;
     (helper.material as THREE.Material).transparent = true;
@@ -195,12 +195,14 @@ export class SceneService {
 
   private getCameraMatrix(SCREEN_WIDTH: number, SCREEN_HEIGHT: number): {left: number, right: number, top: number, bottom: number} {
     const aspect = SCREEN_WIDTH / SCREEN_HEIGHT;
+    
     return {
-      'left': 0.5 * this.frustumSize * aspect / -2,
-      'right': 0.5 * this.frustumSize * aspect / 2,
+      'left': this.frustumSize * aspect / -2,
+      'right': this.frustumSize * aspect / 2,
       'top': this.frustumSize / 2,
       'bottom': this.frustumSize / -2
     }
+
   }
 
   // シーンにオブジェクトを追加する

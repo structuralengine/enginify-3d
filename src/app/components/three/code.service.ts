@@ -165,7 +165,14 @@ export class CodeService {
     const geometry = this.ifcAPI.GetGeometry(modelID, placedGeometry.geometryExpressID);
     const verts = this.ifcAPI.GetVertexArray(geometry.GetVertexData(), geometry.GetVertexDataSize());
     const indices = this.ifcAPI.GetIndexArray(geometry.GetIndexData(), geometry.GetIndexDataSize());
-    const bufferGeometry = this.ifcGeometryToBuffer(placedGeometry.color, verts, indices);
+    const org_color = placedGeometry.color;
+    const my_color: Color = {
+        x: 0.1,
+        y: 0.1,
+        z: 0.1,
+        w: org_color.w
+    }
+    const bufferGeometry = this.ifcGeometryToBuffer(my_color, verts, indices);
 
     //@ts-ignore
     geometry.delete();
@@ -231,6 +238,22 @@ export class CodeService {
     geometry.setAttribute(
       'color',
       new THREE.BufferAttribute(colorFloats, 3));
+    /*
+    // 各頂点の色データを作成
+    const colors = [];
+
+    for (let i = 0; i < vertexData.length; i++) {
+        // ランダムな色を生成 (0から1の範囲)
+        const r = Math.random();
+        const g = Math.random();
+        const b = Math.random();
+        colors.push(r, g, b);
+    }
+
+    // color 属性をジオメトリに設定
+    geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+    */
+
     geometry.setIndex(new THREE.BufferAttribute(indexData, 1));
     return geometry;
   }
