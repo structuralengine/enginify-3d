@@ -101,7 +101,7 @@ export class SceneService {
 
     // 視点移動コントロールの設定
     this.controls = new OrbitControls( this.camera, this.renderer.domElement );
-    this.controls.enableDamping = true; // スムーズな操作のため
+    // this.controls.enableDamping = true; // スムーズな操作のため
     this.controls.addEventListener( 'change', this.render );
     this.camera.updateMatrix();
     this.controls.update();

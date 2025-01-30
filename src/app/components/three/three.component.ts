@@ -28,6 +28,10 @@ export class ThreeComponent implements AfterViewInit {
   }
 
   // マウスクリック時のイベント
+  public onDoubleClick(event: MouseEvent) {
+    
+  }
+
   // @HostListener("pointerdown", ["$event"])
   public onMouseDown(event: MouseEvent) {
     this.scene.onPointerDown(event);
