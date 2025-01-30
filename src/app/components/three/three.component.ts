@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
 import { SceneService } from './scene.service';
+import { CodeService } from './code.service';
 
 @Component({
   selector: 'app-three',
@@ -14,12 +16,15 @@ export class ThreeComponent implements AfterViewInit {
 
   private isDragging = false;
 
-  constructor(private scene: SceneService) { }
+  constructor(
+    private scene: SceneService,
+    private code: CodeService) { }
 
   ngAfterViewInit() {
     if (this.screen) {
-        this.scene.OnInit(this.screen.nativeElement as HTMLCanvasElement);
-    }
+        if(this.scene.OnInit(this.screen.nativeElement as HTMLCanvasElement))
+          this.code.runCode();
+      }
   }
 
   // マウスクリック時のイベント

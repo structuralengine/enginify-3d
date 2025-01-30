@@ -15,20 +15,28 @@ import { SceneService } from './scene.service';
 export class CodeService {
 
   private ifcAPI = new IfcAPI();
+  private initPromise: Promise<void>;
+  private isInitialized = false;
 
   constructor(
     private input: InputDataService,
     private scene: SceneService) {
       // Initialize web-ifc
       this.ifcAPI.SetWasmPath('/assets/web-ifc/bin/');
-      this.ifcAPI.Init().then(() => {
+      this.initPromise = this.ifcAPI.Init().then(() => {
         console.log('web-ifc Initialization complete');
+        this.isInitialized = true;
       }).catch((err) => {
         console.error('web-ifc Initialization failed:', err);
+        throw err;
       });
     }
 
   public async runCode() {
+    if (!this.isInitialized) {
+      // Wait for initialization to complete before proceeding
+      await this.initPromise;
+    }
     const model = this.ifcAPI.CreateModel({ schema: Schemas.IFC4 });
 
     const compiled = ts.transpileModule(this.input.code, { compilerOptions: { module: ts.ModuleKind.CommonJS } })
@@ -90,6 +98,8 @@ export class CodeService {
     let modelID = this.ifcAPI.OpenModel(ifcData);
 
     this.LoadAllGeometry(modelID);
+
+    this.scene.render();
   }
 
   /**
@@ -155,7 +165,14 @@ export class CodeService {
     const geometry = this.ifcAPI.GetGeometry(modelID, placedGeometry.geometryExpressID);
     const verts = this.ifcAPI.GetVertexArray(geometry.GetVertexData(), geometry.GetVertexDataSize());
     const indices = this.ifcAPI.GetIndexArray(geometry.GetIndexData(), geometry.GetIndexDataSize());
-    const bufferGeometry = this.ifcGeometryToBuffer(placedGeometry.color, verts, indices);
+    const org_color = placedGeometry.color;
+    const my_color: Color = {
+        x: 0.1,
+        y: 0.1,
+        z: 0.1,
+        w: org_color.w
+    }
+    const bufferGeometry = this.ifcGeometryToBuffer(my_color, verts, indices);
 
     //@ts-ignore
     geometry.delete();
@@ -221,6 +238,22 @@ export class CodeService {
     geometry.setAttribute(
       'color',
       new THREE.BufferAttribute(colorFloats, 3));
+    /*
+    // 各頂点の色データを作成
+    const colors = [];
+
+    for (let i = 0; i < vertexData.length; i++) {
+        // ランダムな色を生成 (0から1の範囲)
+        const r = Math.random();
+        const g = Math.random();
+        const b = Math.random();
+        colors.push(r, g, b);
+    }
+
+    // color 属性をジオメトリに設定
+    geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+    */
+
     geometry.setIndex(new THREE.BufferAttribute(indexData, 1));
     return geometry;
   }
