@@ -7,14 +7,9 @@
     class="z-10 h-2 bg-white rounded-lg appearance-none cursor-pointer dark:bg-blue-100
     absolute top-12 right-4 p-2">
     
-  <div class="absolute shadow-xl"
-    [style.width.px]="data.boxWidth" 
-    [style.height.px]="data.boxHeight" 
-    [style.top.px]="data.boxTop" 
-    [style.left.px]="data.boxLeft">
-
-  <app-three></app-three>
-</div>
+  <div #three id="three"  class="absolute shadow-xl">
+    <app-three></app-three>
+  </div>
 
 </div>
 

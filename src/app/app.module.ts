@@ -18,6 +18,7 @@ import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { LayoutComponent } from './components/layout/layout.component';
 import { SceneService } from './components/three/scene.service';
 import { KonvaComponent } from './components/konva/konva.component';
+import { SelectBoxComponent } from './components/select-box/select-box.component';
 
 @NgModule({
     declarations: [
@@ -27,7 +28,8 @@ import { KonvaComponent } from './components/konva/konva.component';
         MonacoComponent,
         ToolbarComponent,
         LayoutComponent,
-        KonvaComponent
+        KonvaComponent,
+        SelectBoxComponent
     ],
     bootstrap: [
         AppComponent

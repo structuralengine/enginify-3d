@@ -12,6 +12,8 @@ import { KonvaComponent } from '../konva/konva.component';
 })
 export class LayoutComponent implements OnInit {
   @ViewChild("layout", { static: true }) private layout: ElementRef | undefined;
+  @ViewChild("three", { static: true }) private three: ElementRef | undefined;
+
   private container: HTMLCanvasElement | undefined;
   
   private padding_top = 12;
@@ -56,6 +58,16 @@ export class LayoutComponent implements OnInit {
 
     this.data.boxTop = top + this.padding_top * (1 - ratio);
     this.data.boxLeft = (width - this.padding_right - this.min_width) * (1 - ratio);
+
+    if (this.three) {
+      const three_element = this.three.nativeElement as HTMLElement;
+      const three_style = three_element.style;
+
+      three_style.width = this.data.boxWidth + "px";
+      three_style.height = this.data.boxHeight + "px";
+      three_style.top = this.data.boxTop + "px";
+      three_style.left = this.data.boxLeft + "px";
+      }
   }
 
 }
