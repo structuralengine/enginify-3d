@@ -35,7 +35,7 @@ export class ThreeComponent implements OnInit, AfterViewInit {
 
   // マウスクリック時のイベント
   public onDoubleClick(event: MouseEvent) {
-    this.box_visible(true, event.clientX, event.clientY);
+    this.box_visible(true, event.offsetX, event.offsetY);
   }
 
   // @HostListener("pointerdown", ["$event"])
