@@ -30,7 +30,7 @@ export class SceneService {
 
   // 物体移動コントローラー
   private transformControl:TransformControls | null = null;
-  private transformTarget = []; // 物体移動ターゲット
+  private transformTarget: THREE.Object3D[] = []; // 物体移動ターゲット
 
   // 設置元から呼び出される初期化
   public OnInit(_ontainer: HTMLCanvasElement): boolean {
@@ -101,6 +101,12 @@ export class SceneService {
 
     // 視点移動コントロールの設定
     this.controls = new OrbitControls( this.camera, this.renderer.domElement );
+    // マウスボタンマッピングの変更
+    this.controls.mouseButtons = {
+      LEFT: undefined,
+      MIDDLE: THREE.MOUSE.PAN,
+      RIGHT: THREE.MOUSE.ROTATE
+    };
     // this.controls.enableDamping = true; // スムーズな操作のため
     this.controls.addEventListener( 'change', this.render );
     this.camera.updateMatrix();
@@ -126,13 +132,15 @@ export class SceneService {
     if(this.renderer === null || this.scene === null || this.camera === null) {
       return;
     }
-
     this.renderer.render( this.scene, this.camera );
   }
 
   // 物体移動後の処理
   private updateObject() {
-
+    if(this.camera === null ) {
+      return;
+    }
+    this.camera.updateProjectionMatrix();
   }
 
   // マウスDown
@@ -210,6 +218,7 @@ export class SceneService {
     if(!this.scene) return;
     for (const obj of threeObject) {
       this.scene.add(obj);
+      this.transformTarget.push(obj);
     }
   }
 }

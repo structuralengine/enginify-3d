@@ -65,7 +65,7 @@ export class ThreeComponent implements OnInit, AfterViewInit {
     this.scene.onWindowResize();
   }
 
-  private box_visible(visible: boolean, x?: number, y?: number) {
+  public box_visible(visible: boolean, x?: number, y?: number) {
     if (!this.box) return;
     const box_element = this.box.nativeElement as HTMLElement;
     const box_style = box_element.style;

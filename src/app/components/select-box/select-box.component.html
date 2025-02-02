@@ -8,23 +8,15 @@
   </div>
   
 
-  <div class="relative overflow-x-auto">
+  <div class="relative overflow-x-auto h-40">
     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
 
         <tbody>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Apple MacBook Pro 17"
-                </th>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Microsoft Surface Pro
-                </th>
-            </tr>
-            <tr class="bg-white dark:bg-gray-800">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Magic Mouse 2
+            <tr *ngFor="let item of table_item; let i = index"
+                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <th scope="row"  (click)="selectItem(item)"
+                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                    {{ item.name }}
                 </th>
             </tr>
         </tbody>
