@@ -20,7 +20,7 @@ import { MobxAngularModule } from 'mobx-angular';
         </div>
       </div>
       <div class="workspace">
-        <div #stageContainer class="stage-container"></div>
+        <div #stageContainer class="stage-container" [style.width.px]="800" [style.height.px]="600"></div>
       </div>
       <div class="side-panel">
         <div class="pages">
@@ -56,11 +56,10 @@ import { MobxAngularModule } from 'mobx-angular';
     }
 
     .stage-container {
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      top: 0;
-      left: 0;
+      position: relative;
+      margin: auto;
+      background: #f5f5f5;
+      border: 1px solid #ddd;
     }
 
     .side-panel {
