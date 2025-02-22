@@ -74,7 +74,9 @@ export class KonvaService {
     shape.on('dblclick', () => {
       const colors = ['red', 'green', 'blue', 'yellow'];
       const currentColor = shape.fill();
-      const nextColor = colors[(colors.indexOf(currentColor) + 1) % colors.length];
+      // Handle case where fill is a gradient
+      const currentColorStr = typeof currentColor === 'string' ? currentColor : colors[0];
+      const nextColor = colors[(colors.indexOf(currentColorStr) + 1) % colors.length];
       shape.fill(nextColor);
       shape.getLayer()?.batchDraw();
     });
