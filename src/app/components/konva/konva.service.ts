@@ -7,7 +7,7 @@ import { Shape } from 'konva/lib/Shape';
 })
 export class KonvaService {
   public stage!: Konva.Stage;
-  private layer: any = {};
+  private layer: { [key: string]: Konva.Layer } = {};
   private transformer: Konva.Transformer;
 
   constructor() {
@@ -124,10 +124,16 @@ export class KonvaService {
     this.setDrag(circle);
 
     // Add shape to the first layer
-    const firstLayer = Object.values(this.layer)[0];
-    if (firstLayer) {
+    const layers = Object.values(this.layer);
+    if (layers.length > 0) {
+      const firstLayer = layers[0];
       firstLayer.add(circle);
       firstLayer.batchDraw();
+    } else {
+      // Create default layer if none exists
+      this.addLayer('default');
+      this.layer['default'].add(circle);
+      this.layer['default'].batchDraw();
     }
 
   }
@@ -145,10 +151,16 @@ export class KonvaService {
     this.setDrag(rectangle);
     
     // Add shape to the first layer
-    const firstLayer = Object.values(this.layer)[0];
-    if (firstLayer) {
+    const layers = Object.values(this.layer);
+    if (layers.length > 0) {
+      const firstLayer = layers[0];
       firstLayer.add(rectangle);
       firstLayer.batchDraw();
+    } else {
+      // Create default layer if none exists
+      this.addLayer('default');
+      this.layer['default'].add(rectangle);
+      this.layer['default'].batchDraw();
     }
   }
   public selectShape(shape: Konva.Shape): void {
