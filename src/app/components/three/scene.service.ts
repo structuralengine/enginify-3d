@@ -53,7 +53,7 @@ export class SceneService {
     const SCREEN_WIDTH = this.container.clientWidth;
     const SCREEN_HEIGHT = this.container.clientHeight;
     const cameraMatrix = this.getCameraMatrix(SCREEN_WIDTH, SCREEN_HEIGHT);
-    const near: number = 0.1;
+    const near: number = -1000;
     const far: number = 1000;
     this.camera = new THREE.OrthographicCamera( 
       cameraMatrix.left, cameraMatrix.right, 
@@ -88,12 +88,17 @@ export class SceneService {
 
     const helper = new THREE.GridHelper( 100, 100 );
     helper.position.y = -0.199;
-    (helper.material as THREE.Material).opacity = 0.25;
-    (helper.material as THREE.Material).transparent = true;
+    const helperMaterial = helper.material as THREE.Material;
+    helperMaterial.opacity = 0.25;
+    helperMaterial.transparent = true;
     this.scene.add( helper );
 
     // レンダラーの設定
-    this.renderer = new THREE.WebGLRenderer( { antialias: true } );
+    this.renderer = new THREE.WebGLRenderer( { 
+      preserveDrawingBuffer: true,
+      alpha: false,    // transparent background
+      antialias: true // smooth edges
+    });
     this.renderer.setPixelRatio( window.devicePixelRatio );
     this.renderer.setSize( SCREEN_WIDTH, SCREEN_HEIGHT );
     this.renderer.shadowMap.enabled = true;
@@ -114,6 +119,7 @@ export class SceneService {
 
     // 物体移動コントロールの設定
     this.transformControl = new TransformControls( this.camera, this.renderer.domElement );
+    this.transformControl.setTranslationSnap(1);
     this.transformControl.addEventListener( 'change', this.render );
     this.transformControl.addEventListener( 'dragging-changed', ( event ) => {
       if(this.controls === null)  return;
@@ -141,6 +147,13 @@ export class SceneService {
       return;
     }
     this.camera.updateProjectionMatrix();
+  }
+
+  // 物体移動コントロールの設定
+  public setTranceformControlMode(mode: "translate" | "rotate" | "scale") {
+    if (this.transformControl !== null) {
+      this.transformControl.setMode(mode);
+    }
   }
 
   // マウスDown
@@ -214,11 +227,17 @@ export class SceneService {
   }
 
   // シーンにオブジェクトを追加する
-  public add(...threeObject: THREE.Object3D[]): void {
-    if(!this.scene) return;
+  public add(...threeObject: THREE.Object3D[]): boolean {
+    if(!this.scene) return false;
     for (const obj of threeObject) {
       this.scene.add(obj);
       this.transformTarget.push(obj);
     }
+    return true;
+  }
+
+  // シーンにオブジェクトを追加する
+  public get(): THREE.Object3D[]{
+    return this.transformTarget;
   }
 }

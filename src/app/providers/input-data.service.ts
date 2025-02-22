@@ -8,7 +8,7 @@ import { ElectronService } from './electron.service';
 export class InputDataService {
 
   // three を格納しているdevの状態
-  public range: number = 100;
+  public range: number = 0;
   public boxWidth: number = 300; // 初期幅 (px)
   public boxHeight: number = 300; // 初期高さ (px)
   public boxTop: number = 0; // 初期位置 (px)

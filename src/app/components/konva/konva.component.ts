@@ -1,106 +1,41 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, ViewChild } from '@angular/core';
 import Konva from 'konva';
+import { KonvaService } from './konva.service';
+import * as ReactDOM from "react-dom/client";
+import * as React from "react";
+import { App, store } from "./polotno/editor";
+import { MobxAngularModule } from 'mobx-angular';
 
 @Component({
   selector: 'app-konva',
   standalone: true,
-  imports: [],
+  imports: [MobxAngularModule],
   templateUrl: './konva.component.html'
 })
-export class KonvaComponent implements AfterViewInit, OnDestroy {
-  @ViewChild('konvaContainer', { static: false }) containerRef: ElementRef | undefined;
+export class KonvaComponent {
+  title = "polotno-js";
+  root: ReactDOM.Root | undefined;
+  store = store;
+  ngOnInit(): void {}
 
-  private stage!: Konva.Stage;
-  private layer!: Konva.Layer;
-
-  ngAfterViewInit(): void {
-    this.initializeStage();
-    this.addShapes();
-    this.stage.add(this.layer);
-    // ウィンドウリサイズのハンドリング
-    window.addEventListener('resize', this.onWindowResize);
+  public ngOnChanges() {
+    this.renderComponent();
   }
 
-  ngOnDestroy(): void {
-    window.removeEventListener('resize', this.onWindowResize);
-    this.stage.destroy();
+  public ngAfterViewInit() {
+    this.root = ReactDOM.createRoot(document.getElementById("editor")!);
+    this.renderComponent();
   }
 
-  private initializeStage(): void {
-    if(!this.containerRef) return;
-    const container = this.containerRef.nativeElement;
-
-    this.stage = new Konva.Stage({
-      container: container,
-      width: container.offsetWidth,
-      height: container.offsetHeight,
-    });
-
-    this.layer = new Konva.Layer();
+  private renderComponent() {
+    if (this.root) {
+      this.root.render(React.createElement(App));
+    }
   }
 
-  private addShapes(): void {
-    // 円の作成
-    const circle = new Konva.Circle({
-      x: 100,
-      y: 100,
-      radius: 50,
-      fill: 'red',
-      draggable: true,
-    });
-
-    // 円のクリックイベント
-    circle.on('click', () => {
-      circle.fill('green');
-      this.layer.draw();
-    });
-
-    // 四角形の作成
-    const rectangle = new Konva.Rect({
-      x: 200,
-      y: 200,
-      width: 100,
-      height: 50,
-      fill: 'blue',
-      draggable: true,
-    });
-
-    // 四角形のクリックイベント
-    rectangle.on('click', () => {
-      rectangle.fill('yellow');
-      this.layer.draw();
-    });
-
-    // マウスオーバーイベント
-    circle.on('mouseover', () => {
-      document.body.style.cursor = 'pointer';
-      circle.opacity(0.5);
-      this.layer.draw();
-    });
-
-    // マウスアウトイベント
-    circle.on('mouseout', () => {
-      document.body.style.cursor = 'default';
-      circle.opacity(1);
-      this.layer.draw();
-    });
-
-    // ドラッグ終了イベント
-    circle.on('dragend', () => {
-      console.log(`Circle dragged to x: ${circle.x()}, y: ${circle.y()}`);
-    });
-
-    // 図形をレイヤーに追加
-    this.layer.add(circle);
-    this.layer.add(rectangle);
-  }
-
-  private onWindowResize = () => {
-    if(!this.containerRef) return;
-
-    const container = this.containerRef.nativeElement;
-    this.stage.width(container.offsetWidth);
-    this.stage.height(container.offsetHeight);
-    this.stage.draw();
+  public ngOnDestroy() {
+    if (this.root) {
+      this.root.unmount();
+    }
   }
 }

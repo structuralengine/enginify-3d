@@ -53,11 +53,11 @@ export class LayoutComponent implements OnInit {
     const top = this.container.offsetTop;
 
     const ratio = this.data.range / 100;
-    this.data.boxWidth = this.min_width + (width - this.min_width) * ratio;
-    this.data.boxHeight = this.min_height + (height - this.min_height) * ratio;;
+    this.data.boxWidth = this.min_width + (width - this.min_width) *  (1 - ratio);
+    this.data.boxHeight = this.min_height + (height - this.min_height) *  (1 - ratio);
 
-    this.data.boxTop = top + this.padding_top * (1 - ratio);
-    this.data.boxLeft = (width - this.padding_right - this.min_width) * (1 - ratio);
+    this.data.boxTop = top + this.padding_top * ratio;
+    this.data.boxLeft = (width - this.padding_right - this.min_width) * ratio;
 
     if (this.three) {
       const three_element = this.three.nativeElement as HTMLElement;

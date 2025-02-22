@@ -16,6 +16,7 @@ export class ThreeComponent implements OnInit, AfterViewInit {
   @ViewChild("screen", { static: true }) private screen: ElementRef | undefined;
   @ViewChild("box", { static: true }) private box: ElementRef | undefined;
 
+  private isScreenFocused: boolean = false;
   private isDragging = false;
 
   constructor(
@@ -31,6 +32,28 @@ export class ThreeComponent implements OnInit, AfterViewInit {
         if(this.scene.OnInit(this.screen.nativeElement as HTMLCanvasElement))
           this.code.runCode();
       }
+  }
+
+  onFocus() {
+    this.isScreenFocused = true;
+  }
+
+  onBlur() {
+    this.isScreenFocused = false;
+  }
+
+  onKeyDown(event: KeyboardEvent) {
+    if (this.isScreenFocused){
+      if(event.key === 'w' || event.key === 'W') {
+        this.scene.setTranceformControlMode("translate");
+      }
+      if(event.key === 'e' || event.key === 'E') {
+        this.scene.setTranceformControlMode("rotate");
+      }
+      if(event.key === 'r' || event.key === 'R') {
+        this.scene.setTranceformControlMode("scale");
+      }
+    }
   }
 
   // マウスクリック時のイベント

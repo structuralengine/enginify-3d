@@ -2,8 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
 
 import * as webifc from 'web-ifc';
-import { SceneService } from '../three/scene.service';
-import * as THREE from "three";
+import { ItemViewPortService } from 'src/app/providers/item-view-port.service';
 
 
 @Component({
@@ -15,9 +14,10 @@ import * as THREE from "three";
 export class SelectBoxComponent {
   @Output() itemSelected = new EventEmitter<void>();
   
-  public table_item: { id: string; name: string; }[];
+  public table_item: { id: string; name: string; service: any; }[];
 
-  constructor(private scene: SceneService) {
+  constructor(
+    private viewPort: ItemViewPortService) {
 
     /* webifcのすべてオブジェクトを確認
     Object.keys(webifc).forEach(key => {
@@ -26,52 +26,47 @@ export class SelectBoxComponent {
     */
     webifc.IFCREINFORCINGBAR
     this.table_item = [
-      { id: "view port", name: "ビューポート" },
+      { id: "view port", name: "ビューポート", service: this.viewPort },
 
-      { id: "IFCCOLUMN", name: "柱" },
-      { id: "IFCBEAM", name: "梁" },
-      // { id: "IFCBEARING", name: "軸受" },
-      // { id: "IFCBUILDINGELEMENTPROXY", name: "建築要素プロキシ" },
-      // { id: "IFCCHIMNEY", name: "煙突" },
-      // { id: "IFCCOURSE", name: "コース" },
-      // { id: "IFCCOVERING", name: "被覆" },
-      // { id: "IFCCURTAINWALL", name: "カーテンウォール" },
-      // { id: "IFCDEEPFOUNDATION", name: "深基礎" },
-      // { id: "IFCDOOR", name: "ドア" },
-      { id: "IFCEARTHWORKSELEMENT", name: "土工要素" },
-      { id: "IFCFOOTING", name: "基礎" },
-      // { id: "IFCKERB", name: "縁石" },
-      // { id: "IFCMEMBER", name: "部材" },
-      // { id: "IFCMOORINGDEVICE", name: "係留装置" },
-      // { id: "IFCNAVIGATIONELEMENT", name: "案内要素" },
-      // { id: "IFCPAVEMENT", name: "舗装" },
-      // { id: "IFCPLATE", name: "板" },
-      // { id: "IFCRAIL", name: "レール" },
-      // { id: "IFCRAILING", name: "手すり" },
-      // { id: "IFCRAMP", name: "スロープ" },
-      // { id: "IFCRAMPFLIGHT", name: "ランプフライト" },
-      // { id: "IFCROOF", name: "屋根" },
-      // { id: "IFCSHADINGDEVICE", name: "日除け装置" },
-      { id: "IFCSLAB", name: "スラブ" },
-      // { id: "IFCSTAIR", name: "階段" },
-      // { id: "IFCSTAIRFLIGHT", name: "階段フライト" },
-      // { id: "IFCTRACKELEMENT", name: "軌道要素" },
-      { id: "IFCWALL", name: "壁" },
-      // { id: "IFCWINDOW", name: "窓" }
-      { id: "IFCREINFORCINGBAR", name: "鉄筋" },
+      { id: "IFCCOLUMN", name: "柱", service: null },
+      { id: "IFCBEAM", name: "梁" , service: null },
+      // { id: "IFCBEARING", name: "軸受" , service: null },
+      // { id: "IFCBUILDINGELEMENTPROXY", name: "建築要素プロキシ" , service: null },
+      // { id: "IFCCHIMNEY", name: "煙突" , service: null },
+      // { id: "IFCCOURSE", name: "コース" , service: null },
+      // { id: "IFCCOVERING", name: "被覆" , service: null },
+      // { id: "IFCCURTAINWALL", name: "カーテンウォール" , service: null },
+      // { id: "IFCDEEPFOUNDATION", name: "深基礎" , service: null },
+      // { id: "IFCDOOR", name: "ドア" , service: null },
+      { id: "IFCEARTHWORKSELEMENT", name: "土工要素" , service: null },
+      { id: "IFCFOOTING", name: "基礎" , service: null },
+      // { id: "IFCKERB", name: "縁石" , service: null },
+      // { id: "IFCMEMBER", name: "部材" , service: null },
+      // { id: "IFCMOORINGDEVICE", name: "係留装置" , service: null },
+      // { id: "IFCNAVIGATIONELEMENT", name: "案内要素" , service: null },
+      // { id: "IFCPAVEMENT", name: "舗装" , service: null },
+      // { id: "IFCPLATE", name: "板" , service: null },
+      // { id: "IFCRAIL", name: "レール" , service: null },
+      // { id: "IFCRAILING", name: "手すり" , service: null },
+      // { id: "IFCRAMP", name: "スロープ" , service: null },
+      // { id: "IFCRAMPFLIGHT", name: "ランプフライト" , service: null },
+      // { id: "IFCROOF", name: "屋根" , service: null },
+      // { id: "IFCSHADINGDEVICE", name: "日除け装置" , service: null },
+      { id: "IFCSLAB", name: "スラブ" , service: null },
+      // { id: "IFCSTAIR", name: "階段" , service: null },
+      // { id: "IFCSTAIRFLIGHT", name: "階段フライト" , service: null },
+      // { id: "IFCTRACKELEMENT", name: "軌道要素" , service: null },
+      { id: "IFCWALL", name: "壁" , service: null },
+      // { id: "IFCWINDOW", name: "窓" , service: null },
+      { id: "IFCREINFORCINGBAR", name: "鉄筋" , service: null },
     ];
     
   }
 
-  public selectItem(item: { id: string; name: string; }): void {
+  public selectItem(item: { id: string; name: string; service: any; }): void {
 
-    if(item.id === "view port") {
-      console.log("ビューポート");
-      const geometry = new THREE.BoxGeometry( 1, 1, 1 );
-      const edges = new THREE.EdgesGeometry( geometry );
-      const lineMaterial = new THREE.LineBasicMaterial({ color: 0xffffff });
-      const edgeLines = new THREE.LineSegments( edges, lineMaterial );
-      this.scene.add( edgeLines );
+    if(item.service !== null) {
+      item.service.createItem();
     }
 
     this.itemSelected.emit(); // 親のthree.componentへitemSelectedイベントを発火

@@ -1,6 +1,10 @@
 <div #screen id="screen" 
   (mousedown)="onMouseDown($event)"
   (dblclick)="onDoubleClick($event)"
+  (focus)="onFocus()"
+  (blur)="onBlur()"
+  (keydown)="onKeyDown($event)"
+  tabindex="0"
   class="h-full w-full">
 </div>
 
