@@ -1,13 +1,10 @@
 import { Injectable } from '@angular/core';
-import { IfcAPI, LogLevel, ms, Schemas, IFC4, IFCUNITASSIGNMENT, IFCAXIS2PLACEMENT3D,IFCLENGTHMEASURE,IFCCARTESIANPOINT,IFCAXIS2PLACEMENT2D,IFCCIRCLEPROFILEDEF,IFCDIRECTION,IFCREAL,IFCPOSITIVELENGTHMEASURE,IFCCOLUMN,IFCEXTRUDEDAREASOLID,IFCGLOBALLYUNIQUEID,IFCLABEL,IFCIDENTIFIER, FlatMesh, PlacedGeometry, Color, Vector } from 'web-ifc';
-import * as webifc from 'web-ifc';
+import { IfcAPI, LogLevel, ms, Schemas, IFC4, IFCUNITASSIGNMENT, IFCAXIS2PLACEMENT3D,IFCLENGTHMEASURE,IFCCARTESIANPOINT,IFCAXIS2PLACEMENT2D,IFCCIRCLEPROFILEDEF,IFCDIRECTION,IFCREAL,IFCPOSITIVELENGTHMEASURE,IFCCOLUMN,IFCEXTRUDEDAREASOLID,IFCGLOBALLYUNIQUEID,IFCLABEL,IFCIDENTIFIER } from 'web-ifc';
 
 import * as ts from "typescript";
 
-import * as THREE from "three";
-import { mergeBufferGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import { InputDataService } from 'src/app/providers/input-data.service';
-import { SceneService } from './scene.service';
+import { ItemIfcService } from 'src/app/providers/item-ifc.service';
 
 
 @Injectable({
@@ -21,7 +18,7 @@ export class CodeService {
 
   constructor(
     private input: InputDataService,
-    private scene: SceneService) {
+    private item: ItemIfcService ) {
       // Initialize web-ifc
       this.ifcAPI.SetWasmPath('/assets/web-ifc/bin/');
       this.initPromise = this.ifcAPI.Init().then(() => {
@@ -98,166 +95,9 @@ export class CodeService {
 
     let modelID = this.ifcAPI.OpenModel(ifcData);
 
-    this.LoadAllGeometry(modelID);
-
-    this.scene.render();
+    this.item.LoadAllGeometry(this.ifcAPI, modelID);
   }
 
-  /**
-   * Loads all geometry for the model with id "modelID" into the supplied scene
-   * @scene Threejs Scene object
-   * @modelID Model handle retrieved by OpenModel, model must not be closed
-  */
-  public LoadAllGeometry(modelID: number) {
-
-    let geometries: THREE.BufferGeometry[] = [];
-    let transparentGeometries: THREE.BufferGeometry[] = [];
-
-    this.ifcAPI.StreamAllMeshes(modelID, (mesh: FlatMesh) => {
-      // only during the lifetime of this function call, the geometry is available in memory
-      const placedGeometries: Vector<PlacedGeometry> = mesh.geometries;
-
-      for (let i = 0; i < placedGeometries.size(); i++) {
-        const placedGeometry: PlacedGeometry = placedGeometries.get(i);
-        let mesh = this.getPlacedGeometry(modelID, placedGeometry);
-        let geom = mesh.geometry.applyMatrix4(mesh.matrix);
-        if (placedGeometry.color.w !== 1) {
-          transparentGeometries.push(geom as any);
-        }
-        else {
-          geometries.push(geom as any);
-        }
-      }
-
-      //console.log(this.ifcAPI.wasmModule.HEAPU8.length);
-    });
-
-    console.log("Loading " + geometries.length + " geometries and " + transparentGeometries.length + " transparent geometries");
-    if (geometries.length > 0) {
-      const combinedGeometry = mergeBufferGeometries(geometries);
-      let mat = new THREE.MeshPhongMaterial({ side: THREE.DoubleSide });
-      mat.vertexColors = true;
-      const mergedMesh = new THREE.Mesh(combinedGeometry, mat);
-      this.scene.add(mergedMesh);
-    }
-
-    if (transparentGeometries.length > 0) {
-      const combinedGeometryTransp = mergeBufferGeometries(transparentGeometries);
-      let matTransp = new THREE.MeshPhongMaterial({ side: THREE.DoubleSide });
-      matTransp.vertexColors = true;
-      matTransp.transparent = true;
-      matTransp.opacity = 0.5;
-      const mergedMeshTransp = new THREE.Mesh(combinedGeometryTransp, matTransp);
-      this.scene.add(mergedMeshTransp);
-    }
-  }
-  
-  private getPlacedGeometry(modelID: number, placedGeometry: PlacedGeometry) {
-    const geometry = this.getBufferGeometry(modelID, placedGeometry);
-    const material = this.getMeshMaterial(placedGeometry.color);
-    const mesh = new THREE.Mesh(geometry, material);
-    mesh.matrix = this.getMeshMatrix(placedGeometry.flatTransformation);
-    mesh.matrixAutoUpdate = false;
-    return mesh;
-  }
-
-  private getBufferGeometry(modelID: number, placedGeometry: PlacedGeometry) {
-    // WARNING: geometry must be deleted when requested from WASM
-    const geometry = this.ifcAPI.GetGeometry(modelID, placedGeometry.geometryExpressID);
-    const verts = this.ifcAPI.GetVertexArray(geometry.GetVertexData(), geometry.GetVertexDataSize());
-    const indices = this.ifcAPI.GetIndexArray(geometry.GetIndexData(), geometry.GetIndexDataSize());
-    const org_color = placedGeometry.color;
-    const my_color: Color = {
-        x: 0.1,
-        y: 0.1,
-        z: 0.1,
-        w: org_color.w
-    }
-    const bufferGeometry = this.ifcGeometryToBuffer(my_color, verts, indices);
-
-    //@ts-ignore
-    geometry.delete();
-    return bufferGeometry;
-  }
-
-  private materials: { [key: string]: THREE.MeshPhongMaterial } = {};
-
-  private getMeshMaterial(color: Color) {
-    let colID = `${color.x}${color.y}${color.z}${color.w}`;
-    if (this.materials[colID]) {
-      return this.materials[colID];
-    }
-
-    const col = new THREE.Color(color.x, color.y, color.z);
-    const material = new THREE.MeshPhongMaterial({ color: col, side: THREE.DoubleSide });
-    material.transparent = color.w !== 1;
-    if (material.transparent) material.opacity = color.w;
-
-    this.materials[colID] = material;
-
-    return material;
-  }
-
-  private getMeshMatrix(matrix: Array<number>) {
-    const mat = new THREE.Matrix4();
-    mat.fromArray(matrix);
-    return mat;
-  }
-
-  private ifcGeometryToBuffer(color: Color, vertexData: Float32Array, indexData: Uint32Array) {
-    const geometry = new THREE.BufferGeometry();
-    /*
-    const buffer32 = new THREE.InterleavedBuffer(vertexData, 6);
-    geometry.setAttribute('position', new THREE.InterleavedBufferAttribute(buffer32, 3, 0));
-    geometry.setAttribute('normal', new THREE.InterleavedBufferAttribute(buffer32, 3, 3));
-    */
-
-    let posFloats = new Float32Array(vertexData.length / 2);
-    let normFloats = new Float32Array(vertexData.length / 2);
-    let colorFloats = new Float32Array(vertexData.length / 2);
-
-    for (let i = 0; i < vertexData.length; i += 6) {
-      posFloats[i / 2 + 0] = vertexData[i + 0];
-      posFloats[i / 2 + 1] = vertexData[i + 1];
-      posFloats[i / 2 + 2] = vertexData[i + 2];
-
-      normFloats[i / 2 + 0] = vertexData[i + 3];
-      normFloats[i / 2 + 1] = vertexData[i + 4];
-      normFloats[i / 2 + 2] = vertexData[i + 5];
-
-      colorFloats[i / 2 + 0] = color.x;
-      colorFloats[i / 2 + 1] = color.y;
-      colorFloats[i / 2 + 2] = color.z;
-    }
-
-    geometry.setAttribute(
-      'position',
-      new THREE.BufferAttribute(posFloats, 3));
-    geometry.setAttribute(
-      'normal',
-      new THREE.BufferAttribute(normFloats, 3));
-    geometry.setAttribute(
-      'color',
-      new THREE.BufferAttribute(colorFloats, 3));
-    /*
-    // 各頂点の色データを作成
-    const colors = [];
-
-    for (let i = 0; i < vertexData.length; i++) {
-        // ランダムな色を生成 (0から1の範囲)
-        const r = Math.random();
-        const g = Math.random();
-        const b = Math.random();
-        colors.push(r, g, b);
-    }
-
-    // color 属性をジオメトリに設定
-    geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
-    */
-
-    geometry.setIndex(new THREE.BufferAttribute(indexData, 1));
-    return geometry;
-  }
 
 }
 

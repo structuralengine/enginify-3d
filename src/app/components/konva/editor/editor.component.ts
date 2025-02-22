@@ -4,6 +4,7 @@ import { KonvaService } from '../konva.service';
 import { Page } from '../models/page.model';
 import Konva from 'konva';
 
+
 @Component({
   selector: 'app-editor',
   standalone: true,
@@ -91,6 +92,11 @@ import Konva from 'konva';
       margin: auto;
       background: #f5f5f5;
       border: 1px solid #ddd;
+    }
+
+    .side-panel {
+      padding: 1rem;
+      border-left: 1px solid #ccc;
     }
 
     .zoom-controls {

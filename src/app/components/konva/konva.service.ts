@@ -3,6 +3,7 @@ import Konva from 'konva';
 import { Shape } from 'konva/lib/Shape';
 import { Page } from './models/page.model';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -82,6 +83,7 @@ export class KonvaService {
   public addShape(paths: any[]): void {
     if (!this.currentPage) {
       this.addPage();
+
     }
 
     const path = new Konva.Path({
@@ -171,6 +173,7 @@ export class KonvaService {
     if (!this.currentPage) {
       this.addPage();
     }
+
 
     const rectangle = new Konva.Rect({
       x: 200,
