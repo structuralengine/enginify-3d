@@ -122,8 +122,12 @@ export class KonvaService {
 
     this.setDrag(circle);
 
-    // 図形をレイヤーに追加
-    this.layer.add(circle);
+    // Add shape to the first layer
+    const firstLayer = Object.values(this.layer)[0];
+    if (firstLayer) {
+      firstLayer.add(circle);
+      firstLayer.batchDraw();
+    }
 
   }
 
@@ -138,7 +142,13 @@ export class KonvaService {
     });
 
     this.setDrag(rectangle);
-    this.layer.add(rectangle);
+    
+    // Add shape to the first layer
+    const firstLayer = Object.values(this.layer)[0];
+    if (firstLayer) {
+      firstLayer.add(rectangle);
+      firstLayer.batchDraw();
+    }
   }
   public selectShape(shape: Konva.Shape): void {
     this.transformer.nodes([shape]);
