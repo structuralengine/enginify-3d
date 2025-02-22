@@ -6,8 +6,19 @@ import { Shape } from 'konva/lib/Shape';
   providedIn: 'root'
 })
 export class KonvaService {
-  public stage!: Konva.Stage; // 初期化は`konva.component.ts`で行う
+  public stage!: Konva.Stage;
   private layer: any = {};
+  private transformer: Konva.Transformer;
+
+  constructor() {
+    this.transformer = new Konva.Transformer({
+      rotateEnabled: true,
+      enabledAnchors: ['top-left', 'top-right', 'bottom-left', 'bottom-right'],
+      borderStroke: '#666',
+      borderStrokeWidth: 1,
+      padding: 5
+    });
+  }
 
   // レイヤの作成
   public addLayer(uuid: string): void {
@@ -54,30 +65,45 @@ export class KonvaService {
   }
 
   private setDrag(shape: Shape): void {
-
-    // 円のクリックイベント
-    shape.on('click', () => {
-      shape.fill('green');
-      this.layer.draw();
+    // Selection handling
+    shape.on('click tap', () => {
+      this.selectShape(shape);
     });
 
-    // マウスオーバーイベント
+    // Double click for color change
+    shape.on('dblclick', () => {
+      const colors = ['red', 'green', 'blue', 'yellow'];
+      const currentColor = shape.fill();
+      const nextColor = colors[(colors.indexOf(currentColor) + 1) % colors.length];
+      shape.fill(nextColor);
+      shape.getLayer()?.batchDraw();
+    });
+
+    // Mouse interactions
     shape.on('mouseover', () => {
       document.body.style.cursor = 'pointer';
       shape.opacity(0.5);
-      this.layer.draw();
+      shape.getLayer()?.batchDraw();
     });
 
-    // マウスアウトイベント
     shape.on('mouseout', () => {
       document.body.style.cursor = 'default';
       shape.opacity(1);
-      this.layer.draw();
+      shape.getLayer()?.batchDraw();
     });
 
-    // ドラッグ終了イベント
+    // Drag events
+    shape.on('dragstart', () => {
+      shape.moveToTop();
+      this.transformer.moveToTop();
+    });
+
+    shape.on('dragmove', () => {
+      this.transformer.getLayer()?.batchDraw();
+    });
+
     shape.on('dragend', () => {
-      console.log(`Circle dragged to x: ${shape.x()}, y: ${shape.y()}`);
+      console.log(`Shape dragged to x: ${shape.x()}, y: ${shape.y()}`);
     });
   }
 
@@ -100,8 +126,6 @@ export class KonvaService {
   }
 
   public addRectangle(): void {
-
-    // 四角形の作成
     const rectangle = new Konva.Rect({
       x: 200,
       y: 200,
@@ -111,13 +135,20 @@ export class KonvaService {
       draggable: true,
     });
 
-    // 四角形のクリックイベント
-    rectangle.on('click', () => {
-      rectangle.fill('yellow');
-      this.layer.draw();
-    });
-
-    // 図形をレイヤーに追加
+    this.setDrag(rectangle);
     this.layer.add(rectangle);
+  }
+  public selectShape(shape: Konva.Shape): void {
+    this.transformer.nodes([shape]);
+    const layer = shape.getLayer();
+    if (layer && !layer.find('.transformer').length) {
+      layer.add(this.transformer);
+      layer.batchDraw();
+    }
+  }
+
+  public clearSelection(): void {
+    this.transformer.nodes([]);
+    this.transformer.getLayer()?.batchDraw();
   }
 }

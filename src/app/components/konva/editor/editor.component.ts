@@ -91,6 +91,13 @@ export class EditorComponent implements AfterViewInit {
     });
     // Add initial layer
     this.konvaService.addLayer('layer1');
+
+    // Clear selection when clicking empty stage
+    this.konvaService.stage.on('click tap', (e) => {
+      if (e.target === this.konvaService.stage) {
+        this.konvaService.clearSelection();
+      }
+    });
   }
 
   addShape() { 
