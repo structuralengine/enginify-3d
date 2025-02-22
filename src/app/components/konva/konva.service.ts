@@ -22,14 +22,13 @@ export class KonvaService {
 
   // レイヤの作成
   public addLayer(uuid: string): void {
-
     const layer = new Konva.Layer({
-      name: uuid,             // レイヤーの名前
-      opacity: 0.8,           // 透過度（0〜1）
-      visible: true,          // 表示/非表示の設定
-      clearBeforeDraw: true,  // 描画前に自動的にレイヤーをクリアするかどうか
-      hitGraphEnabled: true,  // ヒットグラフ（クリック判定用の領域）の有効/無効
-      x: 50, // レイヤーの配置位置（ステージ上でのオフセット）
+      name: uuid,
+      opacity: 0.8,
+      visible: true,
+      clearBeforeDraw: true,
+      hitGraphEnabled: true,
+      x: 50,
       y: 50,
       clip: {
         x: 0,
@@ -39,12 +38,17 @@ export class KonvaService {
       }
     });
 
-    this.layer[uuid]= layer;
+    this.layer[uuid] = layer;
     this.stage.add(layer);
+    layer.add(this.transformer);
+    layer.batchDraw();
   }
 
   // 任意形状の作成
   public addShape(layer_uuid: string, paths: any[]): void {
+    if (!(layer_uuid in this.layer)) {
+      this.addLayer(layer_uuid);
+    }
 
     const path = new Konva.Path({
       fill: 'blue',
@@ -56,12 +60,9 @@ export class KonvaService {
 
     this.setDrag(path);
 
-    // 図形をレイヤーに追加
-    if(!(layer_uuid in this.layer)) {
-      this.addLayer(layer_uuid);
-    }
     const layer = this.layer[layer_uuid];
     layer.add(path);
+    layer.batchDraw();
   }
 
   private setDrag(shape: Shape): void {
