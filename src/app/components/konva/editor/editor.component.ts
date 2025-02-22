@@ -93,15 +93,22 @@ export class EditorComponent implements AfterViewInit {
   constructor(private konvaService: KonvaService) {}
   
   ngAfterViewInit() {
-    // Initialize Konva stage
+    // Initialize Konva stage with fixed dimensions
     const container = this.stageContainer.nativeElement;
     this.konvaService.stage = new Konva.Stage({
       container: container,
-      width: container.offsetWidth,
-      height: container.offsetHeight
+      width: 800,
+      height: 600
     });
     // Add initial layer
     this.konvaService.addLayer('layer1');
+
+    // Clear selection when clicking empty stage
+    this.konvaService.stage.on('click tap', (e) => {
+      if (e.target === this.konvaService.stage) {
+        this.konvaService.clearSelection();
+      }
+    });
 
     // Clear selection when clicking empty stage
     this.konvaService.stage.on('click tap', (e) => {
