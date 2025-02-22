@@ -1,13 +1,16 @@
 import { Injectable } from '@angular/core';
 import Konva from 'konva';
 import { Shape } from 'konva/lib/Shape';
+import { Page } from './models/page.model';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class KonvaService {
   public stage!: Konva.Stage;
-  private layer: { [key: string]: Konva.Layer } = {};
+  private pages: Page[] = [];
+  private currentPage: Page | null = null;
   private transformer: Konva.Transformer;
 
   constructor() {
@@ -20,8 +23,8 @@ export class KonvaService {
     });
   }
 
-  // レイヤの作成
-  public addLayer(uuid: string): void {
+  public addPage(): void {
+    const uuid = crypto.randomUUID();
     const layer = new Konva.Layer({
       name: uuid,
       opacity: 0.8,
@@ -29,25 +32,58 @@ export class KonvaService {
       clearBeforeDraw: true,
       hitGraphEnabled: true,
       x: 50,
-      y: 50,
-      clip: {
-        x: 0,
-        y: 0,
-        width: 300,
-        height: 300
-      }
+      y: 50
     });
-
-    this.layer[uuid] = layer;
+    
+    const page = new Page(uuid, layer);
+    this.pages.push(page);
     this.stage.add(layer);
     layer.add(this.transformer);
-    layer.batchDraw();
+    
+    if (!this.currentPage) {
+      this.switchToPage(page.id);
+    }
   }
 
-  // 任意形状の作成
-  public addShape(layer_uuid: string, paths: any[]): void {
-    if (!(layer_uuid in this.layer)) {
-      this.addLayer(layer_uuid);
+  public removePage(pageId: string): void {
+    if (this.pages.length <= 1) return; // Don't remove last page
+    
+    const pageIndex = this.pages.findIndex(p => p.id === pageId);
+    if (pageIndex === -1) return;
+    
+    const page = this.pages[pageIndex];
+    page.layer.destroy();
+    this.pages.splice(pageIndex, 1);
+    
+    if (this.currentPage?.id === pageId) {
+      this.switchToPage(this.pages[0]?.id);
+    }
+  }
+
+  public switchToPage(pageId: string): void {
+    const page = this.pages.find(p => p.id === pageId);
+    if (!page) return;
+    
+    this.pages.forEach(p => {
+      p.layer.visible(p.id === pageId);
+      p.isVisible = p.id === pageId;
+    });
+    this.currentPage = page;
+    page.layer.batchDraw();
+  }
+
+  public getCurrentPage(): Page | null {
+    return this.currentPage;
+  }
+
+  public getPages(): Page[] {
+    return this.pages;
+  }
+
+  public addShape(paths: any[]): void {
+    if (!this.currentPage) {
+      this.addPage();
+
     }
 
     const path = new Konva.Path({
@@ -60,9 +96,11 @@ export class KonvaService {
 
     this.setDrag(path);
 
-    const layer = this.layer[layer_uuid];
-    layer.add(path);
-    layer.batchDraw();
+    if (this.currentPage) {
+      this.currentPage.shapes.push(path);
+      this.currentPage.layer.add(path);
+      this.currentPage.layer.batchDraw();
+    }
   }
 
   private setDrag(shape: Shape): void {
@@ -75,7 +113,6 @@ export class KonvaService {
     shape.on('dblclick', () => {
       const colors = ['red', 'green', 'blue', 'yellow'];
       const currentColor = shape.fill();
-      // Handle case where fill is a gradient
       const currentColorStr = typeof currentColor === 'string' ? currentColor : colors[0];
       const nextColor = colors[(colors.indexOf(currentColorStr) + 1) % colors.length];
       shape.fill(nextColor);
@@ -110,9 +147,11 @@ export class KonvaService {
     });
   }
 
-
   public addCircle(): void {
-    // 円の作成
+    if (!this.currentPage) {
+      this.addPage();
+    }
+
     const circle = new Konva.Circle({
       x: 100,
       y: 100,
@@ -123,22 +162,19 @@ export class KonvaService {
 
     this.setDrag(circle);
 
-    // Add shape to the first layer
-    const layers = Object.values(this.layer);
-    if (layers.length > 0) {
-      const firstLayer = layers[0];
-      firstLayer.add(circle);
-      firstLayer.batchDraw();
-    } else {
-      // Create default layer if none exists
-      this.addLayer('default');
-      this.layer['default'].add(circle);
-      this.layer['default'].batchDraw();
+    if (this.currentPage) {
+      this.currentPage.shapes.push(circle);
+      this.currentPage.layer.add(circle);
+      this.currentPage.layer.batchDraw();
     }
-
   }
 
   public addRectangle(): void {
+    if (!this.currentPage) {
+      this.addPage();
+    }
+
+
     const rectangle = new Konva.Rect({
       x: 200,
       y: 200,
@@ -150,19 +186,13 @@ export class KonvaService {
 
     this.setDrag(rectangle);
     
-    // Add shape to the first layer
-    const layers = Object.values(this.layer);
-    if (layers.length > 0) {
-      const firstLayer = layers[0];
-      firstLayer.add(rectangle);
-      firstLayer.batchDraw();
-    } else {
-      // Create default layer if none exists
-      this.addLayer('default');
-      this.layer['default'].add(rectangle);
-      this.layer['default'].batchDraw();
+    if (this.currentPage) {
+      this.currentPage.shapes.push(rectangle);
+      this.currentPage.layer.add(rectangle);
+      this.currentPage.layer.batchDraw();
     }
   }
+
   public selectShape(shape: Konva.Shape): void {
     this.transformer.nodes([shape]);
     const layer = shape.getLayer();
