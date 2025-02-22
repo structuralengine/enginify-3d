@@ -20,7 +20,7 @@ import { MobxAngularModule } from 'mobx-angular';
         </div>
       </div>
       <div class="workspace">
-        <div #stageContainer></div>
+        <div #stageContainer class="stage-container"></div>
       </div>
       <div class="side-panel">
         <div class="pages">
@@ -50,6 +50,17 @@ import { MobxAngularModule } from 'mobx-angular';
     .workspace {
       border: 1px solid #ccc;
       overflow: hidden;
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .stage-container {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
     }
 
     .side-panel {
@@ -84,10 +95,11 @@ export class EditorComponent implements AfterViewInit {
   
   ngAfterViewInit() {
     // Initialize Konva stage
+    const container = this.stageContainer.nativeElement;
     this.konvaService.stage = new Konva.Stage({
-      container: this.stageContainer.nativeElement,
-      width: 800,
-      height: 600
+      container: container,
+      width: container.offsetWidth,
+      height: container.offsetHeight
     });
     // Add initial layer
     this.konvaService.addLayer('layer1');
