@@ -20,7 +20,7 @@ import { MobxAngularModule } from 'mobx-angular';
         </div>
       </div>
       <div class="workspace">
-        <div #stageContainer></div>
+        <div #stageContainer class="stage-container" [style.width.px]="800" [style.height.px]="600"></div>
       </div>
       <div class="side-panel">
         <div class="pages">
@@ -50,6 +50,16 @@ import { MobxAngularModule } from 'mobx-angular';
     .workspace {
       border: 1px solid #ccc;
       overflow: hidden;
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .stage-container {
+      position: relative;
+      margin: auto;
+      background: #f5f5f5;
+      border: 1px solid #ddd;
     }
 
     .side-panel {
@@ -83,14 +93,29 @@ export class EditorComponent implements AfterViewInit {
   constructor(private konvaService: KonvaService) {}
   
   ngAfterViewInit() {
-    // Initialize Konva stage
+    // Initialize Konva stage with fixed dimensions
+    const container = this.stageContainer.nativeElement;
     this.konvaService.stage = new Konva.Stage({
-      container: this.stageContainer.nativeElement,
+      container: container,
       width: 800,
       height: 600
     });
     // Add initial layer
     this.konvaService.addLayer('layer1');
+
+    // Clear selection when clicking empty stage
+    this.konvaService.stage.on('click tap', (e) => {
+      if (e.target === this.konvaService.stage) {
+        this.konvaService.clearSelection();
+      }
+    });
+
+    // Clear selection when clicking empty stage
+    this.konvaService.stage.on('click tap', (e) => {
+      if (e.target === this.konvaService.stage) {
+        this.konvaService.clearSelection();
+      }
+    });
   }
 
   addShape() { 
