@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild  } from '@angular/core';
 import { ThreeComponent } from '../three/three.component';
 import { SceneService } from '../three/scene.service';
-import { InputDataService } from 'src/app/providers/input-data.service';
+import { InputDataService } from '../../providers/input-data.service';
 import { KonvaComponent } from '../konva/konva.component';
 
 @Component({

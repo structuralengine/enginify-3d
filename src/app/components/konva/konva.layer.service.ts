@@ -29,18 +29,16 @@ export class KonvaLayerService {
 
     const layer = new Konva.Layer({
       name: uuid,
-      opacity: 0.8,
       visible: true,
       clearBeforeDraw: true,
-      hitGraphEnabled: true,
-      x: 0,
-      y: 0,
-      clip: {
-        x: 0,
-        y: 0,
-        width: width,
-        height: height
-      }
+      // x: 0,
+      // y: 0,
+      // clip: {
+      //   x: 0,
+      //   y: 0,
+      //   width: width,
+      //   height: height
+      // }
     });
     layer.add(this.transformer);
     layer.batchDraw();
