@@ -24,15 +24,22 @@ export class KonvaShapeService {
   // 任意形状の作成
   public addShape(layer_uuid: string, paths: any[]): void {
     const layer = this.layer.getPage(layer_uuid);
-    if (!layer) return;
+    if (!layer) {
+      console.error('Layer not found:', layer_uuid);
+      return;
+    }
 
     // より視覚的に確認しやすい図形を作成
     const path = new Konva.Path({
-      fill: '#FF5733', // 明るいオレンジ色
-      stroke: 'black', // 黒い枠線
-      strokeWidth: 2,  // 枠線の太さ
+      fill: '#FF5733',       // 明るいオレンジ色
+      stroke: 'black',       // 黒い枠線
+      strokeWidth: 3,        // より太い枠線
       draggable: true,
-      opacity: 0.8,    // 少し透明に
+      opacity: 1,            // 完全に不透明に
+      shadowColor: 'black',  // 影を追加して視認性を向上
+      shadowBlur: 5,
+      shadowOffset: { x: 2, y: 2 },
+      shadowOpacity: 0.5
     });
     
     // 中央に配置
@@ -40,7 +47,7 @@ export class KonvaShapeService {
     path.y(150);
     
     // より大きな三角形
-    path.data('M 0 0 L 100 0 L 50 100 Z');
+    path.data('M 0 0 L 150 0 L 75 150 Z');
 
     // 図形をレイヤーに追加
     layer.add(path);
@@ -52,6 +59,9 @@ export class KonvaShapeService {
     console.log('Shape data:', path.data());
     
     this.setDrag(path);
+    
+    // 図形が追加されたことを示す視覚的なインジケータを追加
+    this.addShapeIndicator(layer);
   }
 
   private setDrag(shape: Shape): void {
@@ -110,5 +120,36 @@ export class KonvaShapeService {
   public clearSelection(): void {
     this.transformer.nodes([]);
     this.transformer.getLayer()?.batchDraw();
+  }
+
+  // 図形が追加されたことを示す視覚的なインジケータを追加
+  private addShapeIndicator(layer: Konva.Layer): void {
+    // パルス効果のある円を作成
+    const indicator = new Konva.Circle({
+      x: 50,
+      y: 50,
+      radius: 20,
+      fill: 'green',
+      opacity: 0.7
+    });
+    
+    layer.add(indicator);
+    
+    // パルスアニメーションを作成
+    const anim = new Konva.Animation((frame) => {
+      if (!frame) return;
+      const scale = 1 + Math.sin(frame.time / 200) * 0.2;
+      indicator.scale({ x: scale, y: scale });
+    }, layer);
+    
+    // アニメーションを開始
+    anim.start();
+    
+    // 3秒後にアニメーションを停止して円を削除
+    setTimeout(() => {
+      anim.stop();
+      indicator.destroy();
+      layer.batchDraw();
+    }, 3000);
   }
 }

@@ -16,12 +16,19 @@ export class ItemViewPortService {
   ) { }
 
   public createItem() {
+    console.log('ItemViewPortService: Creating item...');
+    
     // three.js のメッシュを作成
     const plane = this.createMesh();
+    console.log('ItemViewPortService: Mesh created:', plane);
+    
     // ViewPort に表示するアイテムを作成
     const paths: any[] = this.setinViewPort(plane);
+    console.log('ItemViewPortService: Paths created:', paths);
+    
     // konva.js の図形を作成
     this.createShape(plane, paths);
+    console.log('ItemViewPortService: Shape created for plane UUID:', plane.uuid);
   }
 
   ////////////////////////////////////////////////////////////////////

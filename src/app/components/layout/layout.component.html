@@ -1,13 +1,16 @@
-<div #layout id="layout" class="h-full w-full">
+<div #layout id="layout" class="h-full w-full relative">
 
-  <app-konva></app-konva>
+  <!-- Konva component with explicit positioning and higher z-index -->
+  <div class="absolute inset-0 z-20 border-4 border-purple-500">
+    <app-konva></app-konva>
+  </div>
 
   <input id="default-range" type="range" value="{{data.range}}" (input)="changeRange($event)" 
     min="0" max="100" step="1"
-    class="z-10 h-2 bg-white rounded-lg appearance-none cursor-pointer dark:bg-blue-100
+    class="z-30 h-2 bg-white rounded-lg appearance-none cursor-pointer dark:bg-blue-100
     absolute top-12 right-4 p-2">
     
-  <div #three id="three"  class="absolute shadow-xl">
+  <div #three id="three" class="absolute shadow-xl z-10">
     <app-three></app-three>
   </div>
 
