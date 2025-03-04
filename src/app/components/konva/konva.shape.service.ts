@@ -24,6 +24,7 @@ export class KonvaShapeService {
   // 任意形状の作成
   public addShape(layer_uuid: string, paths: any[]): void {
     const layer = this.layer.getPage(layer_uuid);
+    if (!layer) return;
 
     const path = new Konva.Path({
       fill: 'blue',
@@ -33,6 +34,10 @@ export class KonvaShapeService {
     path.y(50);
     path.data('M 200 100 L 50 50 L 50 100 Z');
 
+    // 図形をレイヤーに追加
+    layer.add(path);
+    layer.batchDraw();
+    
     this.setDrag(path);
   }
 
