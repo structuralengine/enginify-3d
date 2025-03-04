@@ -25,11 +25,16 @@ export class KonvaLayerService {
 
   // Initialize Konva stage with fixed dimensions
   public addPage(uuid: string, width: number, height: number) {
-    if(!this.konva.stage) return;
+    if(!this.konva.stage) {
+      console.error('Konva stage not initialized');
+      return;
+    }
+
+    console.log('Adding page with UUID:', uuid, 'width:', width, 'height:', height);
 
     const layer = new Konva.Layer({
       name: uuid,
-      opacity: 0.8,
+      opacity: 1, // Fully opaque
       visible: true,
       clearBeforeDraw: true,
       hitGraphEnabled: true,
@@ -42,12 +47,26 @@ export class KonvaLayerService {
         height: height
       }
     });
+    
+    // Add a background rectangle to make the layer visible
+    const background = new Konva.Rect({
+      x: 0,
+      y: 0,
+      width: width,
+      height: height,
+      fill: '#f0f0f0',
+      stroke: 'blue',
+      strokeWidth: 2,
+      opacity: 0.3
+    });
+    
+    layer.add(background);
     layer.add(this.transformer);
     layer.batchDraw();
     this.pages[uuid] = layer;
 
     this.konva.stage.add(layer);
-
+    console.log('Layer added to stage:', layer);
   }
 
   public removePage(pageId: string): void {
