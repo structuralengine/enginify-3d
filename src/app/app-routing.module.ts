@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
 import { MonacoComponent } from './components/monaco/monaco.component';
-import { EditorComponent } from './components/konva/editor/editor.component';
+import { LayoutComponent } from './components/layout/layout.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/design', pathMatch: 'full' },
-    { path: 'design', component: EditorComponent },
+    { path: 'design', component: LayoutComponent },
     { path: 'code', component: MonacoComponent }
 ];

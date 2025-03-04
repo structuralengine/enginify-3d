@@ -1,9 +1,9 @@
+// @ts-ignore
+import * as webifc from 'web-ifc';
+
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
-
-import * as webifc from 'web-ifc';
-import { ItemViewPortService } from 'src/app/providers/item-view-port.service';
-
+import { ItemViewPortService } from './item-view-port.service';
 
 @Component({
   selector: 'app-select-box',

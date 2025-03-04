@@ -11,7 +11,5 @@
     "target": "ES2022",
     "module": "ES2022",
     "resolveJsonModule": true, // JSON ファイルをモジュールとしてインポートできるようにする設定です。
-    "jsx": "react-jsx",
-    "skipLibCheck": true,
   }
 }

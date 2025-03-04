@@ -5,15 +5,15 @@
 - [Angular](https://v18.angular.jp/)
 - [Electron](https://www.electronjs.org/ja/docs/latest/)
 - スタイルシート
-  - [tailwind](https://tailwindui.com)
+  - [tailwind](/docs/tailwind.md)
 - コンポーネント
-  - [Flowbite](https://flowbite.com/docs/getting-started/quickstart/)
+  - [Flowbite](/docs/flowbite.md)
 - ~~ドッキングウィンドウ~~
   - [Dock Spawn TS](https://node-projects.github.io/dock-spawn-ts/)
 - 3Dエンジン
   - [three.js](https://threejs.org/)
 - 2Dエンジン  
-  - [konva.js](https://konvajs.org/docs/index.html)
+  - [konva.js](/docs/konva.md)
 - スプレッドシート
   - [ParamQuery Grid](https://paramquery.com/tutorial)
 - コードエディタ

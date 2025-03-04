@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { SceneService } from '../components/three/scene.service';
+import { SceneService } from '../three/scene.service';
 import * as THREE from "three";
-import { KonvaService } from '../components/konva/konva.service';
+import { KonvaLayerService } from '../konva/konva.layer.service';
+import { KonvaShapeService } from '../konva/konva.shape.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,8 @@ export class ItemViewPortService {
 
   constructor( 
     private scene: SceneService,
-    private konva: KonvaService
+    private layer: KonvaLayerService,
+    private shape: KonvaShapeService
   ) { }
 
   public createItem() {
@@ -379,7 +381,18 @@ export class ItemViewPortService {
   ////////////////////////////////////////////////////////////////////
   // konva.js の図形を作成
   createShape(plane: THREE.Mesh, paths: any[]) {
-    this.konva.addShape(plane.uuid, paths);
+    const uuid: string = plane.uuid;
+    
+    // PlaneGeometryからパラメータを取得
+    // ジオメトリがPlaneGeometryの場合、parametersから幅と高さを取得
+    if (plane.geometry instanceof THREE.PlaneGeometry) {
+      const geometry = plane.geometry as THREE.PlaneGeometry;
+      const w = geometry.parameters.width;
+      const h = geometry.parameters.height;
+      this.layer.addPage(uuid, w, h);
+      this.shape.addShape(uuid, paths);
+    }
+
   }
 
 

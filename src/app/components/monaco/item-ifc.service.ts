@@ -1,8 +1,10 @@
+// @ts-ignore
+import { IfcAPI, FlatMesh, PlacedGeometry, Color, Vector } from 'web-ifc';
+
 import { Injectable } from '@angular/core';
-import { SceneService } from '../components/three/scene.service';
+import { SceneService } from '../three/scene.service';
 import * as THREE from "three";
 import { mergeBufferGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
-import { IfcAPI, FlatMesh, PlacedGeometry, Color, Vector } from 'web-ifc';
 
 
 

@@ -1,10 +1,12 @@
-import { Injectable } from '@angular/core';
+// @ts-ignore
 import { IfcAPI, LogLevel, ms, Schemas, IFC4, IFCUNITASSIGNMENT, IFCAXIS2PLACEMENT3D,IFCLENGTHMEASURE,IFCCARTESIANPOINT,IFCAXIS2PLACEMENT2D,IFCCIRCLEPROFILEDEF,IFCDIRECTION,IFCREAL,IFCPOSITIVELENGTHMEASURE,IFCCOLUMN,IFCEXTRUDEDAREASOLID,IFCGLOBALLYUNIQUEID,IFCLABEL,IFCIDENTIFIER } from 'web-ifc';
+
+import { Injectable } from '@angular/core';
 
 import * as ts from "typescript";
 
-import { InputDataService } from 'src/app/providers/input-data.service';
-import { ItemIfcService } from 'src/app/providers/item-ifc.service';
+import { InputDataService } from '../../providers/input-data.service';
+import { ItemIfcService } from '../monaco/item-ifc.service';
 
 
 @Injectable({
@@ -24,7 +26,7 @@ export class CodeService {
       this.initPromise = this.ifcAPI.Init().then(() => {
         console.log('web-ifc Initialization complete');
         this.isInitialized = true;
-      }).catch((err) => {
+      }).catch((err: any) => {
         console.error('web-ifc Initialization failed:', err);
         throw err;
       });
