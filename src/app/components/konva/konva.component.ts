@@ -69,7 +69,9 @@ export class KonvaComponent implements AfterViewInit, OnDestroy, OnInit {
     // Update debug info
     const stageInfoElement = document.getElementById('stage-size');
     if (stageInfoElement && this.konva.stage) {
-      stageInfoElement.textContent = `W: ${this.konva.stage.width()}, H: ${this.konva.stage.height()}`;
+      // Cast to any to avoid TypeScript errors with Konva types
+      const stage = this.konva.stage as any;
+      stageInfoElement.textContent = `W: ${stage.width()}, H: ${stage.height()}`;
     }
   }
 
