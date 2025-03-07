@@ -40,6 +40,8 @@ export class KonvaShapeService {
       });
       // レイヤーをステージに追加
       stage.add(layer);
+      // コンテナにtouch-manipulationクラスを追加
+      layer.classList.add('touch-manipulation');
       layer.listening(true);
       console.log('New layer created');
     }

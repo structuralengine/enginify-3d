@@ -30,6 +30,7 @@
     "@angular/platform-browser-dynamic": "18.2.13",
     "@angular/router": "18.2.13",
     "flowbite": "^3.0.0",
+    "interactjs": "^1.10.27",
     "konva": "^9.3.18",
     "monaco-editor": "^0.52.2",
     "path": "^0.12.7",

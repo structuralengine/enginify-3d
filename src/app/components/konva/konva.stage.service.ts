@@ -43,7 +43,7 @@ export class KonvaStageService {
       width: width * 10,
       height: height * 10,
       x: 0,
-      y: 0
+      y: 0,
     });
 
     this.stages[uuid] = stage;
