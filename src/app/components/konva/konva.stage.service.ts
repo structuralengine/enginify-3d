@@ -40,8 +40,8 @@ export class KonvaStageService {
     const stage = new Konva.Stage({
       id: uuid,
       container: this.container,
-      width: width * 100,
-      height: height * 100,
+      width: width * 10,
+      height: height * 10,
       x: 0,
       y: 0
     });
