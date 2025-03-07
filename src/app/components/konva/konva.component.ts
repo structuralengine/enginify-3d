@@ -16,52 +16,16 @@ export class KonvaComponent implements AfterViewInit, OnDestroy {
   constructor(private konva: KonvaStageService) { }
 
   ngAfterViewInit(): void {
-    if(!this.containerRef) return;
-    const container = this.containerRef.nativeElement as HTMLDivElement;
-    if(this.konva.stage) return;
-    this.stageInit(container);
-  }
-
-  private stageInit(container: HTMLDivElement){
-    this.konva.stage = new Konva.Stage({
-      container: container,
-      width: container.offsetWidth,
-      height: container.offsetHeight,
-    });
+    this.konva.Init(this.containerRef);
   }
 
   ngOnDestroy(): void {
-    if(this.konva.stage) 
-      this.konva.stage.destroy();
+    this.konva.Destroy();
   }
-
-  zoomIn() {
-    if (!this.konva.stage) return;
-    const scale = this.konva.stage.scaleX() * 1.2;
-    this.konva.stage.scale({ x: scale, y: scale });
-    this.konva.stage.batchDraw();
-  }
-  
-  zoomOut() {
-    if (!this.konva.stage) return;
-    const scale = this.konva.stage.scaleX() / 1.2;
-    this.konva.stage.scale({ x: scale, y: scale });
-    this.konva.stage.batchDraw();
-  }
-  
 
   // ウインドウがリサイズした時のイベント処理
   @HostListener('window:resize')
   onResize(): void {
-    // ウインドウサイズが変更された時にステージを再描画
-    if(!this.containerRef) return;
-    const container = this.containerRef.nativeElement as HTMLDivElement;
-    if(this.konva.stage) {
-      this.konva.stage.width(container.offsetWidth);
-      this.konva.stage.height(container.offsetHeight);
-      this.konva.stage.draw();
-    } else {
-      this.stageInit(container);
-    }
+    this.konva.Resize();
   }
 }

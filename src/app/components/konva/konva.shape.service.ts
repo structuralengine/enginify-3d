@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import Konva from 'konva';
 import { Shape } from 'konva/lib/Shape';
-import { KonvaLayerService } from './konva.layer.service';
+import { KonvaStageService } from './konva.stage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +11,7 @@ export class KonvaShapeService {
   // 図形の移動を制御する
   private transformer: Konva.Transformer;
 
-  constructor(private layer: KonvaLayerService) {
+  constructor(private stage: KonvaStageService) {
     this.transformer = new Konva.Transformer({
       rotateEnabled: true,
       enabledAnchors: ['top-left', 'top-right', 'bottom-left', 'bottom-right'],
@@ -22,9 +22,27 @@ export class KonvaShapeService {
   }
 
   // 任意形状の作成
-  public addShape(layer_uuid: string, paths: any[]): void {
-    const layer = this.layer.getPage(layer_uuid);
-    if (!layer) return;
+  public addShape(stageid: string, paths: any[]): void {
+    const stage = this.stage.getPage(stageid);
+    if (!stage) return;
+
+    // Stageからレイヤーを取得
+    let layer = stage.getLayers()[0]; // 最初のレイヤーを取得
+    
+    // レイヤーがなければ新しく作成
+    if (!layer) {
+      layer = new Konva.Layer({
+        name: 'layer-' + Date.now(),
+        opacity: 0.8,
+        fill: '#000000',
+        visible: true,
+        clearBeforeDraw: true
+      });
+      // レイヤーをステージに追加
+      stage.add(layer);
+      layer.listening(true);
+      console.log('New layer created');
+    }
 
     // より視覚的に確認しやすい図形を作成
     const path = new Konva.Path({
@@ -45,11 +63,6 @@ export class KonvaShapeService {
     // 図形をレイヤーに追加
     layer.add(path);
     layer.batchDraw();
-    
-    // コンソールに図形追加を記録
-    console.log('Shape added to layer:', layer_uuid);
-    console.log('Shape position:', { x: path.x(), y: path.y() });
-    console.log('Shape data:', path.data());
     
     this.setDrag(path);
   }

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { SceneService } from '../three/scene.service';
 import * as THREE from "three";
-import { KonvaLayerService } from '../konva/konva.layer.service';
 import { KonvaShapeService } from '../konva/konva.shape.service';
+import { KonvaStageService } from '../konva/konva.stage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +11,7 @@ export class ItemViewPortService {
 
   constructor( 
     private scene: SceneService,
-    private layer: KonvaLayerService,
+    private stage: KonvaStageService,
     private shape: KonvaShapeService
   ) { }
 
@@ -389,7 +389,7 @@ export class ItemViewPortService {
       const geometry = plane.geometry as THREE.PlaneGeometry;
       const w = geometry.parameters.width;
       const h = geometry.parameters.height;
-      this.layer.addPage(uuid, w, h);
+      this.stage.addPage(uuid, w, h);
       this.shape.addShape(uuid, paths);
     }
 
