@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import Konva from 'konva';
 import { Shape } from 'konva/lib/Shape';
-import { KonvaStageService } from './konva.stage.service';
+import { KonvaLayerService } from './konva.layer.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +11,7 @@ export class KonvaShapeService {
   // 図形の移動を制御する
   private transformer: Konva.Transformer;
 
-  constructor(private stage: KonvaStageService) {
+  constructor(private layer: KonvaLayerService) {
     this.transformer = new Konva.Transformer({
       rotateEnabled: true,
       enabledAnchors: ['top-left', 'top-right', 'bottom-left', 'bottom-right'],
@@ -22,30 +22,10 @@ export class KonvaShapeService {
   }
 
   // 任意形状の作成
-  public addShape(stageid: string, paths: any[]): void {
-    const stage = this.stage.getPage(stageid);
-    if (!stage) return;
-
-    // Stageからレイヤーを取得
-    let layer = stage.getLayers()[0]; // 最初のレイヤーを取得
+  public addShape(layer_uuid: string, paths: any[]): void {
+    const layer = this.layer.getPage(layer_uuid);
+    if (!layer) return;
     
-    // レイヤーがなければ新しく作成
-    if (!layer) {
-      layer = new Konva.Layer({
-        name: 'layer-' + Date.now(),
-        opacity: 0.8,
-        fill: '#000000',
-        visible: true,
-        clearBeforeDraw: true
-      });
-      // レイヤーをステージに追加
-      stage.add(layer);
-      // コンテナにtouch-manipulationクラスを追加
-      layer.classList.add('touch-manipulation');
-      layer.listening(true);
-      console.log('New layer created');
-    }
-
     // より視覚的に確認しやすい図形を作成
     const path = new Konva.Path({
       fill: '#FF5733', // 明るいオレンジ色
