@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import Konva from 'konva';
 import { InputDataService } from 'src/app/providers/input-data.service';
 import { KonvaStageService } from './konva.stage.service';
+import { ItemViewPortService } from '../select-box/item-view-port.service';
 
 
 @Component({
@@ -14,10 +15,16 @@ import { KonvaStageService } from './konva.stage.service';
 export class KonvaComponent implements AfterViewInit, OnDestroy {
   @ViewChild('konvaContainer', { static: false }) containerRef: ElementRef | undefined;
 
-  constructor(private konva: KonvaStageService) { }
+  constructor(private konva: KonvaStageService,
+    private test: ItemViewPortService
+  ) { }
 
   ngAfterViewInit(): void {
     this.konva.Init(this.containerRef);
+
+    // 一時的にテスト用のアイテムを作成
+    this.test.createItem();
+    // this.test.createItem();
   }
 
   ngOnDestroy(): void {

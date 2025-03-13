@@ -17,6 +17,7 @@ export class KonvaStageService {
       container: this.container,
       width: this.container.offsetWidth,
       height: this.container.offsetHeight,
+      draggable: true,
     });
   }
   

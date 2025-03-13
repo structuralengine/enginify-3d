@@ -22,30 +22,47 @@ export class KonvaLayerService {
       name: uuid,
       visible: true,
       clearBeforeDraw: true,
-      width: width,
-      height: height
+      crip:{
+        x: 0,
+        y: 0,
+        width: width,
+        height: height
+      }
     });
     this.konva.stage.add(layer);
+
+    // レイヤーに矩形を追加
+    const rect = new Konva.Rect({
+      x: 0,
+      y: 0,
+      width: width,
+      height: height,
+      fill: 'white',
+      stroke: 'black',
+      strokeWidth: 1
+    });
+
+    layer.add(rect);
 
     // レイヤーのキャンバス要素を取得
     const canvas = layer.getCanvas()._canvas as HTMLCanvasElement;
     if (canvas) {
-      canvas.style.backgroundColor = '#ffffff';
-      canvas.style.position = 'absolute';  
-      canvas.style.width = `${width}px`;   
-      canvas.style.height = `${height}px`; 
+      // canvas.style.backgroundColor = '#ffffff';
+      // canvas.style.position = 'absolute';  
+      // canvas.style.width = `${width}px`;   
+      // canvas.style.height = `${height}px`; 
       // target elements with the "draggable" class
-      interact(canvas)
-      .draggable({
-        listeners: { move: this.dragMoveListener },
-        inertia: true,
-        modifiers: [
-          interact.modifiers.restrictRect({
-            restriction: 'parent',
-            endOnly: true
-          })
-        ]
-      })
+      // interact(canvas)
+      // .draggable({
+      //   listeners: { move: this.dragMoveListener },
+      //   inertia: true,
+      //   modifiers: [
+      //     interact.modifiers.restrictRect({
+      //       restriction: 'parent',
+      //       endOnly: true
+      //     })
+      //   ]
+      // })
     }
 
     layer.batchDraw();
